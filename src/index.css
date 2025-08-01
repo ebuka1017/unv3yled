@@ -1,47 +1,54 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Cortex Design System - Sophisticated AI Taste Companion */
+/* Cortex Design System - Bubblegum Glass AI Companion */
 
 @layer base {
   :root {
-    /* Core Brand Colors */
-    --neural-purple: 260 85% 45%;
-    --neural-purple-light: 260 85% 65%;
-    --neural-purple-dark: 260 85% 25%;
-    --neural-blue: 220 91% 60%;
-    --neural-cyan: 180 100% 70%;
+    /* Bubblegum Pink Core Colors */
+    --bubblegum-pink: 330 85% 75%;
+    --bubblegum-pink-light: 330 85% 85%;
+    --bubblegum-pink-dark: 320 80% 65%;
+    --coral-pink: 340 90% 80%;
+    --peach-pink: 10 85% 85%;
     
-    /* Glass & Depth */
-    --glass-primary: 240 10% 8%;
-    --glass-secondary: 240 10% 12%;
-    --glass-tertiary: 240 10% 16%;
-    --glass-accent: 260 85% 45%;
+    /* Notepad Yellows */
+    --notepad-yellow: 50 40% 92%;
+    --notepad-yellow-warm: 45 45% 88%;
+    --notepad-yellow-dark: 40 35% 80%;
+    
+    /* Glass & Depth with warm tones */
+    --glass-primary: 50 40% 92%;
+    --glass-secondary: 45 45% 88%;
+    --glass-tertiary: 330 85% 95%;
+    --glass-accent: 330 85% 75%;
     
     /* Text Hierarchy */
-    --text-primary: 0 0% 98%;
-    --text-secondary: 240 5% 75%;
-    --text-muted: 240 5% 55%;
-    --text-accent: 260 85% 75%;
+    --text-primary: 25 25% 20%;
+    --text-secondary: 25 15% 40%;
+    --text-muted: 25 10% 60%;
+    --text-accent: 320 80% 50%;
     
     /* Semantic Colors */
-    --success: 142 76% 36%;
-    --warning: 38 92% 50%;
-    --error: 0 84% 60%;
+    --success: 142 76% 50%;
+    --warning: 38 92% 60%;
+    --error: 0 84% 65%;
     
     /* Gradients */
-    --gradient-neural: linear-gradient(135deg, hsl(var(--neural-purple)) 0%, hsl(var(--neural-blue)) 50%, hsl(var(--neural-cyan)) 100%);
-    --gradient-glass: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
-    --gradient-depth: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.4) 100%);
+    --gradient-bubblegum: linear-gradient(135deg, hsl(var(--bubblegum-pink)) 0%, hsl(var(--coral-pink)) 50%, hsl(var(--peach-pink)) 100%);
+    --gradient-glass: linear-gradient(135deg, hsl(var(--glass-primary) / 0.8) 0%, hsl(var(--glass-secondary) / 0.9) 100%);
+    --gradient-shimmer: linear-gradient(90deg, transparent, hsl(var(--bubblegum-pink) / 0.3), transparent);
     
-    /* Shadows */
-    --shadow-neural: 0 8px 32px rgba(126, 87, 194, 0.3);
-    --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.4);
-    --shadow-elevation: 0 4px 16px rgba(0, 0, 0, 0.2);
+    /* Shadows with pink tints */
+    --shadow-bubblegum: 0 8px 32px hsl(var(--bubblegum-pink-dark) / 0.2);
+    --shadow-glass: 0 8px 32px hsl(var(--bubblegum-pink) / 0.1);
+    --shadow-elevation: 0 4px 16px hsl(var(--bubblegum-pink-dark) / 0.15);
     
     /* Motion */
-    --ease-neural: cubic-bezier(0.4, 0, 0.2, 1);
+    --ease-bubblegum: cubic-bezier(0.4, 0, 0.2, 1);
     --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
     
     /* Legacy mappings for shadcn compatibility */
@@ -51,30 +58,30 @@
     --card-foreground: var(--text-primary);
     --popover: var(--glass-secondary);
     --popover-foreground: var(--text-primary);
-    --primary: var(--neural-purple);
+    --primary: var(--bubblegum-pink-dark);
     --primary-foreground: var(--text-primary);
     --secondary: var(--glass-tertiary);
     --secondary-foreground: var(--text-secondary);
-    --muted: var(--glass-tertiary);
+    --muted: var(--notepad-yellow-dark);
     --muted-foreground: var(--text-muted);
-    --accent: var(--neural-purple);
+    --accent: var(--bubblegum-pink);
     --accent-foreground: var(--text-primary);
     --destructive: var(--error);
     --destructive-foreground: var(--text-primary);
-    --border: 240 10% 20%;
-    --input: 240 10% 16%;
-    --ring: var(--neural-purple);
-    --radius: 12px;
+    --border: 330 20% 85%;
+    --input: 50 40% 96%;
+    --ring: var(--bubblegum-pink-dark);
+    --radius: 24px;
     
     /* Sidebar specific */
     --sidebar-background: var(--glass-primary);
     --sidebar-foreground: var(--text-primary);
-    --sidebar-primary: var(--neural-purple);
+    --sidebar-primary: var(--bubblegum-pink-dark);
     --sidebar-primary-foreground: var(--text-primary);
     --sidebar-accent: var(--glass-secondary);
     --sidebar-accent-foreground: var(--text-secondary);
-    --sidebar-border: 240 10% 20%;
-    --sidebar-ring: var(--neural-purple);
+    --sidebar-border: 330 20% 85%;
+    --sidebar-ring: var(--bubblegum-pink-dark);
   }
 }
 
@@ -85,27 +92,29 @@
 
   body {
     @apply bg-background text-foreground;
-    background: radial-gradient(ellipse at top, hsl(var(--glass-secondary)) 0%, hsl(var(--glass-primary)) 100%);
+    background: var(--gradient-glass);
     min-height: 100vh;
     font-family: 'Inter', system-ui, sans-serif;
   }
   
-  /* Glass morphism utilities */
+  /* Bubblegum Glass morphism utilities */
   .glass {
-    backdrop-filter: blur(16px);
+    backdrop-filter: blur(20px);
     background: var(--gradient-glass);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid hsl(var(--bubblegum-pink) / 0.2);
+    box-shadow: var(--shadow-glass);
   }
   
   .glass-strong {
-    backdrop-filter: blur(24px);
-    background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.08) 100%);
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(32px);
+    background: linear-gradient(135deg, hsl(var(--glass-primary) / 0.9) 0%, hsl(var(--glass-secondary) / 0.95) 100%);
+    border: 1px solid hsl(var(--bubblegum-pink) / 0.3);
+    box-shadow: var(--shadow-bubblegum);
   }
   
-  /* Neural gradient text */
-  .text-neural {
-    background: var(--gradient-neural);
+  /* Bubblegum gradient text */
+  .text-bubblegum {
+    background: var(--gradient-bubblegum);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -113,25 +122,50 @@
   
   /* Hover animations */
   .hover-lift {
-    transition: transform 0.3s var(--ease-neural);
+    transition: all 0.3s var(--ease-bubblegum);
   }
   
   .hover-lift:hover {
     transform: translateY(-4px);
+    box-shadow: var(--shadow-bubblegum);
   }
   
-  /* Pulse animation for voice recording */
-  .pulse-neural {
-    animation: pulse-neural 2s infinite;
+  /* Shimmer animation */
+  .shimmer {
+    background: var(--gradient-shimmer);
+    background-size: 200% 100%;
+    animation: shimmer 3s ease-in-out infinite;
   }
   
-  @keyframes pulse-neural {
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+  
+  /* Voice recording with better feedback */
+  .pulse-recording {
+    animation: pulse-recording 1.5s ease-in-out infinite;
+  }
+  
+  @keyframes pulse-recording {
     0%, 100% {
-      box-shadow: 0 0 0 0 rgba(126, 87, 194, 0.7);
+      transform: scale(1);
+      box-shadow: 0 0 0 0 hsl(var(--bubblegum-pink-dark) / 0.7);
     }
     50% {
-      box-shadow: 0 0 0 20px rgba(126, 87, 194, 0);
+      transform: scale(1.05);
+      box-shadow: 0 0 0 15px hsl(var(--bubblegum-pink-dark) / 0);
     }
+  }
+  
+  /* Float animation */
+  .float {
+    animation: float 3s ease-in-out infinite;
+  }
+  
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
   }
   
   /* Scrollbar styling */
@@ -140,17 +174,17 @@
   }
   
   ::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.05);
+    background: hsl(var(--glass-primary) / 0.5);
     border-radius: 4px;
   }
   
   ::-webkit-scrollbar-thumb {
-    background: rgba(126, 87, 194, 0.3);
+    background: hsl(var(--bubblegum-pink) / 0.4);
     border-radius: 4px;
   }
   
   ::-webkit-scrollbar-thumb:hover {
-    background: rgba(126, 87, 194, 0.5);
+    background: hsl(var(--bubblegum-pink) / 0.6);
   }
 }
 
