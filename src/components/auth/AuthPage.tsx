@@ -95,7 +95,7 @@ export function AuthPage() {
             </div>
           </div>
           <h1 className="font-bold text-neural bg-gradient-neural bg-clip-text text-transparent mb-2 text-5xl">unv3iled</h1>
-          <p className="text-text-secondary text-lg">Discover things &amp; people you didn't know you loved with an A--powered taste companion</p>
+          <p className="text-text-secondary text-lg">Discover things &amp; people you didn't know you loved with an Ai-powered taste companion</p>
         </motion.div>
 
         <Card className="glass-strong border-white/20 shadow-glass">
