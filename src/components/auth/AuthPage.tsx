@@ -94,7 +94,7 @@ export function AuthPage() {
               <Sparkles className="w-6 h-6 text-neural-cyan absolute -top-1 -right-1" />
             </div>
           </div>
-          <h1 className="font-bold text-neural bg-gradient-neural bg-clip-text text-transparent mb-2 text-5xl">unv3iled</h1>
+          <h1 className="font-bold text-neural bg-gradient-neural bg-clip-text text-transparent mb-2 text-5xl">unv3yled</h1>
           <p className="text-text-secondary text-lg">Discover things &amp; people you didn't know you loved with an Ai-powered taste companion</p>
         </motion.div>
 
