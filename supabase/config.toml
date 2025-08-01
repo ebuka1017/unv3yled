@@ -1,1 +1,13 @@
 project_id = "cuzefzvjufahiqnijbwx"
+
+[functions.spotify-sync]
+verify_jwt = true
+
+[functions.qloo-recommendations] 
+verify_jwt = true
+
+[functions.gemini-insights]
+verify_jwt = true
+
+[functions.voice-chat]
+verify_jwt = true

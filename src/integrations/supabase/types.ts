@@ -55,13 +55,97 @@ export type Database = {
           },
         ]
       }
+      match_messages: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          match_id: string
+          sender_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          match_id: string
+          sender_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          match_id?: string
+          sender_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "match_messages_match_id_fkey"
+            columns: ["match_id"]
+            isOneToOne: false
+            referencedRelation: "matches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "match_messages_sender_id_fkey"
+            columns: ["sender_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
+          },
+        ]
+      }
+      matches: {
+        Row: {
+          created_at: string
+          id: string
+          similarity_score: number
+          status: string | null
+          user_a: string
+          user_b: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          similarity_score: number
+          status?: string | null
+          user_a: string
+          user_b: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          similarity_score?: number
+          status?: string | null
+          user_a?: string
+          user_b?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "matches_user_a_fkey"
+            columns: ["user_a"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "matches_user_b_fkey"
+            columns: ["user_b"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
+          age: number | null
           avatar_url: string | null
           created_at: string
           display_name: string | null
           email: string | null
           id: string
+          location: string | null
+          onboarded_at: string | null
           preferences: Json | null
           spotify_access_token: string | null
           spotify_connected: boolean | null
@@ -73,11 +157,14 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          age?: number | null
           avatar_url?: string | null
           created_at?: string
           display_name?: string | null
           email?: string | null
           id?: string
+          location?: string | null
+          onboarded_at?: string | null
           preferences?: Json | null
           spotify_access_token?: string | null
           spotify_connected?: boolean | null
@@ -89,11 +176,14 @@ export type Database = {
           user_id: string
         }
         Update: {
+          age?: number | null
           avatar_url?: string | null
           created_at?: string
           display_name?: string | null
           email?: string | null
           id?: string
+          location?: string | null
+          onboarded_at?: string | null
           preferences?: Json | null
           spotify_access_token?: string | null
           spotify_connected?: boolean | null
@@ -248,6 +338,38 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "spotify_data_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
+          },
+        ]
+      }
+      taste_match_profiles: {
+        Row: {
+          cultural_summary: string | null
+          id: string
+          last_updated: string
+          qloo_vector: Json | null
+          user_id: string
+        }
+        Insert: {
+          cultural_summary?: string | null
+          id?: string
+          last_updated?: string
+          qloo_vector?: Json | null
+          user_id: string
+        }
+        Update: {
+          cultural_summary?: string | null
+          id?: string
+          last_updated?: string
+          qloo_vector?: Json | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "taste_match_profiles_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "profiles"
