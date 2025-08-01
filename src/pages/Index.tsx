@@ -11,7 +11,7 @@ const Index = () => {
 
   useEffect(() => {
     if (!loading && !user) {
-      navigate('/landing');
+      navigate('/auth');
     }
   }, [user, loading, navigate]);
 
@@ -24,7 +24,7 @@ const Index = () => {
   }
 
   if (!user) {
-    return <Landing />;
+    return null;
   }
 
   return (

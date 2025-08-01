@@ -1,11 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useAuth } from "@/hooks/useAuth";
+import { useNavigate, Link } from "react-router-dom";
 import { Sparkles, Music, Users, Heart, ArrowRight, Brain, Zap } from "lucide-react";
-import { Link } from "react-router-dom";
 
 export default function Landing() {
-  const { signInWithSpotify } = useAuth();
+  const { user } = useAuth();
+  const navigate = useNavigate();
 
   return (
     <div className="min-h-screen">
@@ -22,8 +23,8 @@ export default function Landing() {
               <Link to="/about" className="text-muted-foreground hover:text-foreground transition-colors">
                 About
               </Link>
-              <Button onClick={signInWithSpotify} className="pill-button">
-                Get Started
+              <Button onClick={() => navigate(user ? '/dashboard' : '/auth')} className="pill-button">
+                {user ? 'Dashboard' : 'Get Started'}
               </Button>
             </nav>
           </div>
@@ -48,12 +49,12 @@ export default function Landing() {
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
             <Button 
-              onClick={signInWithSpotify} 
+              onClick={() => navigate(user ? '/dashboard' : '/auth')} 
               size="lg"
               className="pill-button text-lg px-8 py-6"
             >
-              <Music className="w-5 h-5 mr-2" />
-              Connect with Spotify
+              <Sparkles className="w-5 h-5 mr-2" />
+              {user ? 'Go to Dashboard' : 'Get Started'}
               <ArrowRight className="w-5 h-5 ml-2" />
             </Button>
           </div>
@@ -137,12 +138,12 @@ export default function Landing() {
             Join thousands of users who have already transformed their cultural discovery experience
           </p>
           <Button 
-            onClick={signInWithSpotify} 
+            onClick={() => navigate(user ? '/dashboard' : '/auth')} 
             size="lg"
             className="pill-button text-lg px-8 py-6"
           >
             <Heart className="w-5 h-5 mr-2" />
-            Start Your Journey
+            {user ? 'Go to Dashboard' : 'Start Your Journey'}
           </Button>
         </div>
       </section>

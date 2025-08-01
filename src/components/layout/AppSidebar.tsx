@@ -29,7 +29,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 
 const navigation = [
-  { name: "Chat", href: "/", icon: MessageSquare },
+  { name: "Chat", href: "/dashboard", icon: MessageSquare },
   { name: "Profile", href: "/profile", icon: User },
   { name: "Recommendations", href: "/recommendations", icon: Sparkles },
   { name: "Spotify", href: "/spotify", icon: Music },
@@ -45,7 +45,7 @@ export function AppSidebar() {
   const collapsed = state === "collapsed";
 
   const isActive = (path: string) => {
-    if (path === "/") return location.pathname === "/";
+    if (path === "/dashboard") return location.pathname === "/dashboard";
     return location.pathname.startsWith(path);
   };
 

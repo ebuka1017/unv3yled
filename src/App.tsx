@@ -15,6 +15,10 @@ import TasteTwins from "./pages/TasteTwins";
 import Saved from "./pages/Saved";
 import Settings from "./pages/Settings";
 import Landing from "./pages/Landing";
+import About from "./pages/About";
+import Terms from "./pages/Terms";
+import Privacy from "./pages/Privacy";
+import DataUsage from "./pages/DataUsage";
 
 const queryClient = new QueryClient();
 
@@ -25,8 +29,8 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
-          <Route path="/landing" element={<Landing />} />
-          <Route path="/" element={<Index />} />
+          <Route path="/" element={<Landing />} />
+          <Route path="/dashboard" element={<Index />} />
           <Route path="/profile" element={<TasteProfile />} />
           <Route path="/recommendations" element={<Recommendations />} />
           <Route path="/spotify" element={<SpotifySync />} />
@@ -36,6 +40,10 @@ const App = () => (
           <Route path="/auth" element={<AuthPage />} />
           <Route path="/auth/callback" element={<AuthCallback />} />
           <Route path="/onboarding" element={<Onboarding />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/terms" element={<Terms />} />
+          <Route path="/privacy" element={<Privacy />} />
+          <Route path="/data-usage" element={<DataUsage />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

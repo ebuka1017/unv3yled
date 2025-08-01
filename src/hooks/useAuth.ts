@@ -19,9 +19,9 @@ export function useAuth() {
         
         // Handle auth events
         if (event === 'SIGNED_IN') {
-          navigate('/');
+          navigate('/dashboard');
         } else if (event === 'SIGNED_OUT') {
-          navigate('/auth');
+          navigate('/');
         }
       }
     );
