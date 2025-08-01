@@ -46,10 +46,10 @@ export default function Settings() {
       setProfile(data);
       setFormData({
         display_name: data.display_name || '',
-        bio: data.bio || '',
-        email_notifications: data.preferences?.email_notifications ?? true,
-        match_notifications: data.preferences?.match_notifications ?? true,
-        recommendation_notifications: data.preferences?.recommendation_notifications ?? true,
+        bio: (data as any).bio || '',
+        email_notifications: (data.preferences as any)?.email_notifications ?? true,
+        match_notifications: (data.preferences as any)?.match_notifications ?? true,
+        recommendation_notifications: (data.preferences as any)?.recommendation_notifications ?? true,
       });
     } catch (error) {
       console.error('Error fetching profile:', error);
@@ -67,6 +67,7 @@ export default function Settings() {
           display_name: formData.display_name,
           bio: formData.bio,
           preferences: {
+            ...(profile?.preferences as any || {}),
             email_notifications: formData.email_notifications,
             match_notifications: formData.match_notifications,
             recommendation_notifications: formData.recommendation_notifications,

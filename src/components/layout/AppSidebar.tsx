@@ -10,7 +10,6 @@ import {
   Bookmark,
   Settings,
   LogOut,
-  Home,
   ChevronRight,
 } from "lucide-react";
 import {
@@ -30,11 +29,10 @@ import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 
 const navigation = [
-  { name: "Home", href: "/", icon: Home },
-  { name: "Chat", href: "/chat", icon: MessageSquare },
+  { name: "Chat", href: "/", icon: MessageSquare },
+  { name: "Profile", href: "/profile", icon: User },
   { name: "Recommendations", href: "/recommendations", icon: Sparkles },
-  { name: "Taste Profile", href: "/profile", icon: User },
-  { name: "Spotify Sync", href: "/spotify", icon: Music },
+  { name: "Spotify", href: "/spotify", icon: Music },
   { name: "Taste Twins", href: "/friends", icon: Users },
   { name: "Saved", href: "/saved", icon: Bookmark },
   { name: "Settings", href: "/settings", icon: Settings },
