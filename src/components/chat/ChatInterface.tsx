@@ -34,9 +34,12 @@ interface VoiceState {
 }
 
 export function ChatInterface() {
+  console.log('ChatInterface component rendering');
   const { user } = useAuth();
   const { toast } = useToast();
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useState<Message[]>([
+    { id: "1", content: "Hello! I'm your AI music assistant. What can I help you discover today?", role: "assistant", timestamp: new Date() }
+  ]);
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [voiceState, setVoiceState] = useState<VoiceState>({
