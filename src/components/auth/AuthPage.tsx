@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Brain, Music, ArrowRight, Loader2 } from "lucide-react";
+import { Brain, Music, ArrowRight, Loader2, ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -56,6 +56,17 @@ export function AuthPage() {
     <div className="min-h-screen flex items-center justify-center p-6">
       <Card className="w-full max-w-md glass-card">
         <CardHeader className="text-center">
+          <div className="flex items-center justify-between w-full mb-4">
+            <Button 
+              variant="ghost" 
+              size="sm"
+              onClick={() => navigate('/')}
+              className="rounded-full p-2"
+            >
+              <ArrowLeft className="w-4 h-4" />
+            </Button>
+            <div className="flex-1" />
+          </div>
           <div className="mx-auto w-16 h-16 rounded-3xl bg-primary/20 flex items-center justify-center mb-4 shimmer">
             <Brain className="w-8 h-8 text-primary" />
           </div>

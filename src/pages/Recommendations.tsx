@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useRecommendations, Recommendation } from "@/hooks/useRecommendations";
 import { 
   Music, 
   Book, 
@@ -14,7 +15,8 @@ import {
   X, 
   ExternalLink,
   RefreshCw,
-  Sparkles
+  Sparkles,
+  Loader2
 } from "lucide-react";
 
 const mockRecommendations = {
@@ -114,31 +116,45 @@ const categoryIcons = {
 
 export default function Recommendations() {
   const [activeTab, setActiveTab] = useState("music");
-  const [likedItems, setLikedItems] = useState<number[]>([]);
-  const [dismissedItems, setDismissedItems] = useState<number[]>([]);
+  const [likedItems, setLikedItems] = useState<string[]>([]);
+  const [dismissedItems, setDismissedItems] = useState<string[]>([]);
+  const { recommendations, isLoading, generateRecommendations } = useRecommendations();
 
-  const handleLike = (id: number) => {
+  useEffect(() => {
+    // Generate initial recommendations
+    generateRecommendations("I'd like some personalized recommendations based on my taste profile");
+  }, [generateRecommendations]);
+
+  const handleLike = (id: string) => {
     setLikedItems(prev => [...prev, id]);
   };
 
-  const handleDismiss = (id: number) => {
+  const handleDismiss = (id: string) => {
     setDismissedItems(prev => [...prev, id]);
   };
 
   const getFilteredRecommendations = (category: string) => {
-    return mockRecommendations[category as keyof typeof mockRecommendations]?.filter(
-      item => !dismissedItems.includes(item.id)
-    ) || [];
+    return recommendations.filter(
+      item => item.category === category && !dismissedItems.includes(item.id)
+    );
   };
 
-  const renderMusicCard = (item: any) => (
+  const refreshRecommendations = async () => {
+    await generateRecommendations(`Generate fresh ${activeTab} recommendations based on my taste profile`);
+  };
+
+  const renderMusicCard = (item: Recommendation) => (
     <Card key={item.id} className="glass hover-lift overflow-hidden">
-      <div className="aspect-square bg-primary/10 flex items-center justify-center">
-        <Music className="w-12 h-12 text-primary/50" />
+      <div className="aspect-square bg-primary/10 flex items-center justify-center overflow-hidden">
+        {item.image ? (
+          <img src={item.image} alt={item.title} className="w-full h-full object-cover" />
+        ) : (
+          <Music className="w-12 h-12 text-primary/50" />
+        )}
       </div>
       <CardContent className="p-4">
         <h3 className="font-semibold text-lg mb-1">{item.title}</h3>
-        <p className="text-muted-foreground mb-2">{item.artist}</p>
+        <p className="text-muted-foreground mb-2">{item.metadata?.artist || 'Unknown Artist'}</p>
         <Badge variant="secondary" className="rounded-full mb-3">
           {(item.confidence * 100).toFixed(0)}% match
         </Badge>
@@ -162,9 +178,16 @@ export default function Recommendations() {
           >
             <X className="w-4 h-4" />
           </Button>
-          <Button size="sm" variant="ghost" className="rounded-full">
-            <ExternalLink className="w-4 h-4" />
-          </Button>
+          {item.external_urls?.spotify && (
+            <Button 
+              size="sm" 
+              variant="ghost" 
+              className="rounded-full"
+              onClick={() => window.open(item.external_urls.spotify, '_blank')}
+            >
+              <ExternalLink className="w-4 h-4" />
+            </Button>
+          )}
         </div>
       </CardContent>
     </Card>
@@ -303,8 +326,12 @@ export default function Recommendations() {
               Discover your next cultural obsession with AI-powered recommendations
             </p>
           </div>
-          <Button className="glass-button">
-            <RefreshCw className="w-4 h-4 mr-2" />
+          <Button 
+            className="glass-button" 
+            onClick={refreshRecommendations}
+            disabled={isLoading}
+          >
+            <RefreshCw className={`w-4 h-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
             Refresh All
           </Button>
         </div>
@@ -331,9 +358,16 @@ export default function Recommendations() {
           </TabsList>
 
           <TabsContent value="music" className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {getFilteredRecommendations("music").map(renderMusicCard)}
-            </div>
+            {isLoading ? (
+              <div className="flex items-center justify-center py-12">
+                <Loader2 className="w-8 h-8 animate-spin text-primary" />
+                <span className="ml-2 text-muted-foreground">Loading recommendations...</span>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {getFilteredRecommendations("music").map(renderMusicCard)}
+              </div>
+            )}
           </TabsContent>
 
           <TabsContent value="books" className="space-y-6">
@@ -371,7 +405,7 @@ export default function Recommendations() {
             </div>
             <div>
               <div className="text-3xl font-bold text-primary mb-2">
-                {Object.values(mockRecommendations).flat().length - dismissedItems.length}
+                {recommendations.length - dismissedItems.length}
               </div>
               <p className="text-muted-foreground">Active Recommendations</p>
             </div>

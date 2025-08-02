@@ -1,7 +1,10 @@
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Music, Book, Film, MapPin, Shirt, Star } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
+import { Music, Book, Film, MapPin, Shirt, Star, Loader2 } from "lucide-react";
 
 const mockTasteData = {
   music: {
@@ -40,6 +43,55 @@ const categoryIcons = {
 };
 
 export default function TasteProfile() {
+  const { user } = useAuth();
+  const [tasteData, setTasteData] = useState(mockTasteData);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchUserTasteData = async () => {
+      if (!user) return;
+      
+      try {
+        // Fetch user's Spotify data and other preference data
+        const { data: spotifyData } = await supabase
+          .from('spotify_data')
+          .select('*')
+          .eq('user_id', user.id)
+          .single();
+
+        const { data: recommendations } = await supabase
+          .from('qloo_recommendations')
+          .select('*')
+          .eq('user_id', user.id)
+          .order('created_at', { ascending: false })
+          .limit(10);
+
+        // Process and analyze data to create dynamic taste profile
+        if (spotifyData || recommendations) {
+          // For now, keep mock data but add real data processing here
+          setTasteData(mockTasteData);
+        }
+      } catch (error) {
+        console.error('Error fetching taste data:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchUserTasteData();
+  }, [user]);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="w-8 h-8 animate-spin text-primary mx-auto mb-4" />
+          <p className="text-muted-foreground">Analyzing your taste profile...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="p-6 max-w-6xl mx-auto">
       <motion.div
@@ -75,7 +127,7 @@ export default function TasteProfile() {
 
         {/* Category Breakdown */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {Object.entries(mockTasteData).map(([category, data], index) => {
+          {Object.entries(tasteData).map(([category, data], index) => {
             const Icon = categoryIcons[category as keyof typeof categoryIcons];
             return (
               <motion.div
