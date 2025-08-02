@@ -2,17 +2,15 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Brain, Heart, Sparkles, Users, ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
-
 export default function About() {
-  return (
-    <div className="min-h-screen">
+  return <div className="min-h-screen">
       {/* Header */}
       <header className="glass-strong border-b border-primary/20">
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <Link to="/" className="flex items-center gap-2">
               <Brain className="w-8 h-8 text-primary" />
-              <span className="text-2xl font-bold text-foreground">Cortex</span>
+              <span className="text-2xl font-bold text-foreground">unv3iled</span>
             </Link>
             
             <Link to="/">
@@ -31,14 +29,11 @@ export default function About() {
           <div className="text-center mb-16">
             <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
               About
-              <span className="text-transparent bg-gradient-to-r from-primary to-primary-glow bg-clip-text">
+              <span className="bg-gradient-to-r from-primary to-primary-glow bg-clip-text text-pink-400">
                 {" "}Cortex
               </span>
             </h1>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              We believe that culture connects us all. Cortex helps you discover 
-              the perfect music, movies, books, and experiences tailored to your unique taste.
-            </p>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">We believe that culture connects us all. unv3iled helps you discover the perfect music, movies, books, and experiences tailored to your unique taste.</p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-8 mb-16">
@@ -61,10 +56,7 @@ export default function About() {
                 <CardTitle>Community First</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-muted-foreground">
-                  We're building a community of cultural explorers who share recommendations, 
-                  discover taste twins, and expand their horizons together.
-                </p>
+                <p className="text-muted-foreground">We're building a community of explorers who share recommendations, discover taste twins, and expand their horizons together.</p>
               </CardContent>
             </Card>
           </div>
@@ -82,6 +74,5 @@ export default function About() {
           </div>
         </div>
       </section>
-    </div>
-  );
+    </div>;
 }
