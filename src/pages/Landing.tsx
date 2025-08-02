@@ -15,7 +15,7 @@ export default function Landing() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Brain className="w-8 h-8 text-primary" />
-              <span className="text-2xl font-bold text-foreground">Cortex</span>
+              <span className="text-2xl font-bold text-foreground">unv3iled</span>
             </div>
             
             <nav className="hidden md:flex items-center gap-6">
@@ -35,12 +35,12 @@ export default function Landing() {
         <div className="container mx-auto max-w-4xl text-center">
           <div className="mb-8">
             <h1 className="text-5xl md:text-6xl font-bold text-foreground mb-6">
-              Your AI Cultural
+              Your AI Taste
               <span className="bg-gradient-to-r from-primary to-primary-glow bg-clip-text text-red-300">
                 {" "}Companion
               </span>
             </h1>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">Discover personalized music, movies, books, and cultural experiences tailored to your unique taste profile. Connect with like-minded people who share your taste.</p>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">Discover personalized music, movies, books etc, tailored to your unique taste profile and Connect with like-minded people who share your taste.</p>
           </div>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
