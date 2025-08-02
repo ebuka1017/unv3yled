@@ -148,7 +148,7 @@ export default function Landing() {
             <div>
               <div className="flex items-center gap-2 mb-4">
                 <Brain className="w-6 h-6 text-primary" />
-                <span className="text-xl font-bold">Cortex</span>
+                <span className="text-xl font-bold">unv3iled</span>
               </div>
               <p className="text-muted-foreground text-sm">
                 Your AI-powered cultural discovery companion
