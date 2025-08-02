@@ -19,92 +19,6 @@ import {
   Loader2
 } from "lucide-react";
 
-const mockRecommendations = {
-  music: [
-    {
-      id: 1,
-      title: "Weightless",
-      artist: "Marconi Union",
-      type: "track",
-      confidence: 0.94,
-      reason: "Based on your love for ambient and scientifically-crafted soundscapes",
-      spotifyUrl: "spotify:track:example",
-      image: "/api/placeholder/300/300"
-    },
-    {
-      id: 2,
-      title: "In a Silent Way",
-      artist: "Miles Davis",
-      type: "album",
-      confidence: 0.89,
-      reason: "Perfect fusion of jazz and electronic elements you enjoy",
-      spotifyUrl: "spotify:album:example",
-      image: "/api/placeholder/300/300"
-    }
-  ],
-  books: [
-    {
-      id: 3,
-      title: "Klara and the Sun",
-      author: "Kazuo Ishiguro",
-      confidence: 0.92,
-      reason: "Combines philosophical depth with accessible storytelling",
-      buyUrl: "https://bookshop.org/example",
-      image: "/api/placeholder/200/300"
-    },
-    {
-      id: 4,
-      title: "The Ministry for the Future",
-      author: "Kim Stanley Robinson",
-      confidence: 0.87,
-      reason: "Speculative fiction with environmental consciousness",
-      buyUrl: "https://bookshop.org/example",
-      image: "/api/placeholder/200/300"
-    }
-  ],
-  movies: [
-    {
-      id: 5,
-      title: "Decision to Leave",
-      director: "Park Chan-wook",
-      year: 2022,
-      confidence: 0.91,
-      reason: "Sophisticated thriller with artistic cinematography",
-      trailerUrl: "https://youtube.com/watch?v=example",
-      image: "/api/placeholder/300/450"
-    },
-    {
-      id: 6,
-      title: "The Favourite",
-      director: "Yorgos Lanthimos",
-      year: 2018,
-      confidence: 0.88,
-      reason: "Darkly comedic period piece with unconventional storytelling",
-      trailerUrl: "https://youtube.com/watch?v=example",
-      image: "/api/placeholder/300/450"
-    }
-  ],
-  travel: [
-    {
-      id: 7,
-      title: "Lisbon, Portugal",
-      type: "city",
-      confidence: 0.85,
-      reason: "Rich cultural scene with excellent food and music venues",
-      mapsUrl: "https://maps.google.com/example",
-      image: "/api/placeholder/400/300"
-    },
-    {
-      id: 8,
-      title: "Seoul, South Korea",
-      type: "city", 
-      confidence: 0.93,
-      reason: "Perfect blend of traditional culture and cutting-edge innovation",
-      mapsUrl: "https://maps.google.com/example",
-      image: "/api/placeholder/400/300"
-    }
-  ]
-};
 
 const categoryIcons = {
   music: Music,
@@ -193,14 +107,14 @@ export default function Recommendations() {
     </Card>
   );
 
-  const renderBookCard = (item: any) => (
+  const renderBookCard = (item: Recommendation) => (
     <Card key={item.id} className="glass hover-lift overflow-hidden">
       <div className="aspect-[2/3] bg-primary/10 flex items-center justify-center">
         <Book className="w-12 h-12 text-primary/50" />
       </div>
       <CardContent className="p-4">
         <h3 className="font-semibold text-lg mb-1">{item.title}</h3>
-        <p className="text-muted-foreground mb-2">by {item.author}</p>
+        <p className="text-muted-foreground mb-2">by {item.metadata?.author || 'Unknown Author'}</p>
         <Badge variant="secondary" className="rounded-full mb-3">
           {(item.confidence * 100).toFixed(0)}% match
         </Badge>
@@ -232,14 +146,14 @@ export default function Recommendations() {
     </Card>
   );
 
-  const renderMovieCard = (item: any) => (
+  const renderMovieCard = (item: Recommendation) => (
     <Card key={item.id} className="glass hover-lift overflow-hidden">
       <div className="aspect-[2/3] bg-primary/10 flex items-center justify-center">
         <Film className="w-12 h-12 text-primary/50" />
       </div>
       <CardContent className="p-4">
         <h3 className="font-semibold text-lg mb-1">{item.title}</h3>
-        <p className="text-muted-foreground mb-2">{item.director} • {item.year}</p>
+        <p className="text-muted-foreground mb-2">{item.metadata?.director || 'Unknown Director'} • {item.metadata?.year || 'Unknown Year'}</p>
         <Badge variant="secondary" className="rounded-full mb-3">
           {(item.confidence * 100).toFixed(0)}% match
         </Badge>
@@ -271,7 +185,7 @@ export default function Recommendations() {
     </Card>
   );
 
-  const renderTravelCard = (item: any) => (
+  const renderTravelCard = (item: Recommendation) => (
     <Card key={item.id} className="glass hover-lift overflow-hidden">
       <div className="aspect-video bg-primary/10 flex items-center justify-center">
         <MapPin className="w-12 h-12 text-primary/50" />
@@ -410,7 +324,12 @@ export default function Recommendations() {
               <p className="text-muted-foreground">Active Recommendations</p>
             </div>
             <div>
-              <div className="text-3xl font-bold text-primary mb-2">89%</div>
+              <div className="text-3xl font-bold text-primary mb-2">
+                {recommendations.length > 0 
+                  ? Math.round(recommendations.reduce((acc, rec) => acc + rec.confidence, 0) / recommendations.length * 100) + '%'
+                  : '0%'
+                }
+              </div>
               <p className="text-muted-foreground">Average Match Score</p>
             </div>
           </div>

@@ -16,20 +16,20 @@ serve(async (req) => {
   try {
     const supabaseClient = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
+      Deno.env.get('SUPABASE_ANON_KEY') ?? ''
     );
 
-    // Get the user's session
+    // Get the user's session using the Authorization header
     const authHeader = req.headers.get('Authorization');
     if (!authHeader) {
       throw new Error('No authorization header');
     }
 
-    const { data: { user }, error: authError } = await supabaseClient.auth.getUser(
-      authHeader.replace('Bearer ', '')
-    );
+    const token = authHeader.replace('Bearer ', '');
+    const { data: { user }, error: authError } = await supabaseClient.auth.getUser(token);
 
     if (authError || !user) {
+      console.error('Auth error:', authError);
       throw new Error('Invalid user session');
     }
 
@@ -115,30 +115,51 @@ serve(async (req) => {
       };
     }
 
-    // Store the recommendation in the database
-    const { error: insertError } = await supabaseClient
-      .from('qloo_recommendations')
-      .insert({
-        user_id: user.id,
-        user_prompt: prompt,
-        category: 'general',
-        qloo_response: qlooData,
-        confidence_score: qlooData.confidence_score || 0.8,
+    // Transform Qloo response to our format
+    const transformedRecommendations = Object.entries(qlooData.recommendations || {}).flatMap(([category, items]: [string, any[]]) => 
+      items.map(item => ({
+        id: item.id || Math.random().toString(36).substr(2, 9),
+        category,
+        title: item.title,
         metadata: {
-          context: context,
-          timestamp: new Date().toISOString()
-        }
-      });
+          artist: item.artist || item.author || item.director,
+          author: item.author,
+          director: item.director,
+          year: item.year,
+          type: item.type,
+          ...item
+        },
+        confidence: item.confidence || 0.8,
+        reason: `Recommended based on your ${category} preferences`,
+        external_urls: item.external_urls || {}
+      }))
+    );
 
-    if (insertError) {
-      console.error('Error storing recommendation:', insertError);
+    // Store each recommendation individually
+    for (const rec of transformedRecommendations) {
+      const { error: insertError } = await supabaseClient
+        .from('qloo_recommendations')
+        .insert({
+          user_id: user.id,
+          user_prompt: prompt,
+          category: rec.category,
+          qloo_response: rec,
+          confidence_score: rec.confidence,
+          metadata: {
+            context: context,
+            timestamp: new Date().toISOString()
+          }
+        });
+
+      if (insertError) {
+        console.error('Error storing recommendation:', insertError);
+      }
     }
 
     return new Response(
       JSON.stringify({
         success: true,
-        recommendations: qlooData.recommendations,
-        confidence_score: qlooData.confidence_score
+        recommendations: transformedRecommendations
       }),
       { 
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },

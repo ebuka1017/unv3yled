@@ -21,8 +21,16 @@ export function useRecommendations() {
   const generateRecommendations = useCallback(async (prompt: string, category?: string) => {
     setIsLoading(true);
     try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        throw new Error('No active session');
+      }
+
       const { data, error } = await supabase.functions.invoke('qloo-recommendations', {
-        body: { prompt, context: category || 'general' }
+        body: { prompt, context: category || 'general' },
+        headers: {
+          Authorization: `Bearer ${session.access_token}`,
+        },
       });
 
       if (error) throw error;
