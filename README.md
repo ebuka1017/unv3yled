@@ -104,7 +104,7 @@ Rich Media Recommendation + Insight
 Match Engine (Taste Twin Comparison)
 ```
 
-All parts of the system are live — no mocks, no placeholder states. Edge functions handle Qloo, Spotify, and Gemini orchestration. Chat context and profile vector evolve with every interaction.
+All parts of the system are live. Edge functions handle Qloo, Spotify, and Gemini orchestration. Chat context and profile vector evolve with every interaction.
 
 ---
 
