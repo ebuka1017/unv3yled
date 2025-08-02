@@ -3,13 +3,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { useAuth } from "@/hooks/useAuth";
 import { useNavigate, Link } from "react-router-dom";
 import { Sparkles, Music, Users, Heart, ArrowRight, Brain, Zap } from "lucide-react";
-
 export default function Landing() {
-  const { user } = useAuth();
+  const {
+    user
+  } = useAuth();
   const navigate = useNavigate();
-
-  return (
-    <div className="min-h-screen">
+  return <div className="min-h-screen">
       {/* Header */}
       <header className="glass-strong border-b border-primary/20 sticky top-0 z-50">
         <div className="container mx-auto px-6 py-4">
@@ -37,22 +36,15 @@ export default function Landing() {
           <div className="mb-8">
             <h1 className="text-5xl md:text-6xl font-bold text-foreground mb-6">
               Your AI Cultural
-              <span className="text-transparent bg-gradient-to-r from-primary to-primary-glow bg-clip-text">
+              <span className="bg-gradient-to-r from-primary to-primary-glow bg-clip-text text-red-300">
                 {" "}Companion
               </span>
             </h1>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Discover personalized music, movies, books, and cultural experiences tailored to your unique taste profile.
-              Connect with like-minded people who share your cultural DNA.
-            </p>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">Discover personalized music, movies, books, and cultural experiences tailored to your unique taste profile. Connect with like-minded people who share your taste.</p>
           </div>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
-            <Button 
-              onClick={() => navigate(user ? '/dashboard' : '/auth')} 
-              size="lg"
-              className="pill-button text-lg px-8 py-6"
-            >
+            <Button onClick={() => navigate(user ? '/dashboard' : '/auth')} size="lg" className="pill-button text-lg px-8 py-6">
               <Sparkles className="w-5 h-5 mr-2" />
               {user ? 'Go to Dashboard' : 'Get Started'}
               <ArrowRight className="w-5 h-5 ml-2" />
@@ -106,24 +98,29 @@ export default function Landing() {
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              { icon: Music, title: "Music", desc: "Discover artists and tracks based on your Spotify history" },
-              { icon: "🎬", title: "Movies & TV", desc: "Find your next binge-watch or cinema masterpiece" },
-              { icon: "📚", title: "Books", desc: "Uncover literary gems that match your reading taste" },
-              { icon: "✈️", title: "Travel", desc: "Explore destinations that align with your cultural interests" },
-            ].map((feature, index) => (
-              <Card key={index} className="glass-card text-center">
+            {[{
+            icon: Music,
+            title: "Music",
+            desc: "Discover artists and tracks based on your Spotify history"
+          }, {
+            icon: "🎬",
+            title: "Movies & TV",
+            desc: "Find your next binge-watch or cinema masterpiece"
+          }, {
+            icon: "📚",
+            title: "Books",
+            desc: "Uncover literary gems that match your reading taste"
+          }, {
+            icon: "✈️",
+            title: "Travel",
+            desc: "Explore destinations that align with your cultural interests"
+          }].map((feature, index) => <Card key={index} className="glass-card text-center">
                 <CardContent className="pt-6">
-                  {typeof feature.icon === 'string' ? (
-                    <div className="text-4xl mb-4">{feature.icon}</div>
-                  ) : (
-                    <feature.icon className="w-10 h-10 text-primary mx-auto mb-4" />
-                  )}
+                  {typeof feature.icon === 'string' ? <div className="text-4xl mb-4">{feature.icon}</div> : <feature.icon className="w-10 h-10 text-primary mx-auto mb-4" />}
                   <h3 className="font-bold text-lg mb-2">{feature.title}</h3>
                   <p className="text-muted-foreground text-sm">{feature.desc}</p>
                 </CardContent>
-              </Card>
-            ))}
+              </Card>)}
           </div>
         </div>
       </section>
@@ -137,11 +134,7 @@ export default function Landing() {
           <p className="text-xl text-muted-foreground mb-8">
             Join thousands of users who have already transformed their cultural discovery experience
           </p>
-          <Button 
-            onClick={() => navigate(user ? '/dashboard' : '/auth')} 
-            size="lg"
-            className="pill-button text-lg px-8 py-6"
-          >
+          <Button onClick={() => navigate(user ? '/dashboard' : '/auth')} size="lg" className="pill-button text-lg px-8 py-6">
             <Heart className="w-5 h-5 mr-2" />
             {user ? 'Go to Dashboard' : 'Start Your Journey'}
           </Button>
@@ -213,6 +206,5 @@ export default function Landing() {
           </div>
         </div>
       </footer>
-    </div>
-  );
+    </div>;
 }
