@@ -5,8 +5,7 @@ import { Input } from "@/components/ui/input";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { WelcomeMessage } from "./WelcomeMessage";
-import { 
+import {
   Send, 
   Mic, 
   MicOff, 
@@ -255,10 +254,6 @@ export function ChatInterface() {
 
       {/* Messages */}
       <div className="flex-1 overflow-y-auto p-6 space-y-4">
-        {messages.length === 0 && !isLoading && (
-          <WelcomeMessage onSuggestedPrompt={(prompt) => sendMessage(prompt)} />
-        )}
-        
         <AnimatePresence>
           {messages.map((message) => (
             <motion.div
