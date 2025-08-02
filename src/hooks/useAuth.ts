@@ -17,12 +17,11 @@ export function useAuth() {
         setUser(session?.user ?? null);
         setLoading(false);
         
-        // Handle auth events
-        if (event === 'SIGNED_IN') {
-          navigate('/dashboard');
-        } else if (event === 'SIGNED_OUT') {
+        // Handle auth events  
+        if (event === 'SIGNED_OUT') {
           navigate('/');
         }
+        // Remove auto redirect on sign in - let users navigate manually
       }
     );
 

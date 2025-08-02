@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Brain, Heart, Sparkles, Users, ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 export default function About() {
   return <div className="min-h-screen">
       {/* Header */}
@@ -24,13 +25,17 @@ export default function About() {
       </header>
 
       {/* Content */}
-      <section className="py-20 px-6">
+      <motion.section 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="py-20 px-6"
+      >
         <div className="container mx-auto max-w-4xl">
           <div className="text-center mb-16">
             <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
               About
               <span className="bg-gradient-to-r from-primary to-primary-glow bg-clip-text text-pink-400">
-                {" "}Cortex
+                {" "}unv3iled
               </span>
             </h1>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">We believe that culture connects us all. unv3iled helps you discover the perfect music, movies, books, and experiences tailored to your unique taste.</p>
@@ -73,6 +78,6 @@ export default function About() {
             </Link>
           </div>
         </div>
-      </section>
+      </motion.section>
     </div>;
 }

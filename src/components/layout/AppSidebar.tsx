@@ -71,7 +71,7 @@ export function AppSidebar() {
           {!collapsed && (
             <div>
               <h1 className="text-lg font-bold text-bubblegum bg-gradient-bubblegum bg-clip-text text-transparent">
-                Cortex
+                unv3iled
               </h1>
               <p className="text-xs text-muted-foreground">AI Taste Companion</p>
             </div>

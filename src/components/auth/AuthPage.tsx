@@ -63,7 +63,7 @@ export function AuthPage() {
             <Brain className="w-8 h-8 text-primary" />
           </div>
           <CardTitle className="text-2xl font-bold text-transparent bg-gradient-bubblegum bg-clip-text">
-            Welcome to Cortex
+            Welcome to unv3iled
           </CardTitle>
           <CardDescription>
             Your AI-powered cultural discovery companion

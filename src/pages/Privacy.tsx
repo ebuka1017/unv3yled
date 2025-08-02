@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Brain, ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 
 export default function Privacy() {
   return (
@@ -12,7 +13,7 @@ export default function Privacy() {
           <div className="flex items-center justify-between">
             <Link to="/" className="flex items-center gap-2">
               <Brain className="w-8 h-8 text-primary" />
-              <span className="text-2xl font-bold text-foreground">Cortex</span>
+              <span className="text-2xl font-bold text-foreground">unv3iled</span>
             </Link>
             
             <Link to="/">
@@ -26,7 +27,11 @@ export default function Privacy() {
       </header>
 
       {/* Content */}
-      <section className="py-20 px-6">
+      <motion.section 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="py-20 px-6"
+      >
         <div className="container mx-auto max-w-4xl">
           <div className="text-center mb-16">
             <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
@@ -86,13 +91,13 @@ export default function Privacy() {
                 <h2 className="text-2xl font-bold text-foreground mb-4">Contact Us</h2>
                 <p className="text-muted-foreground">
                   If you have questions about this Privacy Policy, please contact us at 
-                  privacy@cortex.ai
+                  privacy@unv3iled.ai
                 </p>
               </div>
             </CardContent>
           </Card>
         </div>
-      </section>
+      </motion.section>
     </div>
   );
 }

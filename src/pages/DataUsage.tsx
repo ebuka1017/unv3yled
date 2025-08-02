@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Brain, ArrowLeft, Shield, Sparkles, Users } from "lucide-react";
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 
 export default function DataUsage() {
   return (
@@ -12,7 +13,7 @@ export default function DataUsage() {
           <div className="flex items-center justify-between">
             <Link to="/" className="flex items-center gap-2">
               <Brain className="w-8 h-8 text-primary" />
-              <span className="text-2xl font-bold text-foreground">Cortex</span>
+              <span className="text-2xl font-bold text-foreground">unv3iled</span>
             </Link>
             
             <Link to="/">
@@ -26,7 +27,11 @@ export default function DataUsage() {
       </header>
 
       {/* Content */}
-      <section className="py-20 px-6">
+      <motion.section 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="py-20 px-6"
+      >
         <div className="container mx-auto max-w-4xl">
           <div className="text-center mb-16">
             <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
@@ -116,11 +121,11 @@ export default function DataUsage() {
               Questions about how we use your data?
             </p>
             <Button variant="outline" asChild>
-              <a href="mailto:privacy@cortex.ai">Contact Our Privacy Team</a>
+              <a href="mailto:privacy@unv3iled.ai">Contact Our Privacy Team</a>
             </Button>
           </div>
         </div>
-      </section>
+      </motion.section>
     </div>
   );
 }

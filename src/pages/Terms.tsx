@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Brain, ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 
 export default function Terms() {
   return (
@@ -12,7 +13,7 @@ export default function Terms() {
           <div className="flex items-center justify-between">
             <Link to="/" className="flex items-center gap-2">
               <Brain className="w-8 h-8 text-primary" />
-              <span className="text-2xl font-bold text-foreground">Cortex</span>
+              <span className="text-2xl font-bold text-foreground">unv3iled</span>
             </Link>
             
             <Link to="/">
@@ -26,7 +27,11 @@ export default function Terms() {
       </header>
 
       {/* Content */}
-      <section className="py-20 px-6">
+      <motion.section 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="py-20 px-6"
+      >
         <div className="container mx-auto max-w-4xl">
           <div className="text-center mb-16">
             <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
@@ -42,7 +47,7 @@ export default function Terms() {
               <div>
                 <h2 className="text-2xl font-bold text-foreground mb-4">1. Acceptance of Terms</h2>
                 <p className="text-muted-foreground">
-                  By accessing and using Cortex, you accept and agree to be bound by the terms 
+                  By accessing and using unv3iled, you accept and agree to be bound by the terms 
                   and provision of this agreement.
                 </p>
               </div>
@@ -50,7 +55,7 @@ export default function Terms() {
               <div>
                 <h2 className="text-2xl font-bold text-foreground mb-4">2. Use License</h2>
                 <p className="text-muted-foreground">
-                  Permission is granted to temporarily use Cortex for personal, non-commercial 
+                  Permission is granted to temporarily use unv3iled for personal, non-commercial 
                   transitory viewing only. This is the grant of a license, not a transfer of title.
                 </p>
               </div>
@@ -66,7 +71,7 @@ export default function Terms() {
               <div>
                 <h2 className="text-2xl font-bold text-foreground mb-4">4. User Content</h2>
                 <p className="text-muted-foreground">
-                  You retain ownership of any content you submit to Cortex. However, you grant 
+                  You retain ownership of any content you submit to unv3iled. However, you grant 
                   us a license to use this content to provide and improve our services.
                 </p>
               </div>
@@ -75,13 +80,13 @@ export default function Terms() {
                 <h2 className="text-2xl font-bold text-foreground mb-4">5. Contact</h2>
                 <p className="text-muted-foreground">
                   If you have any questions about these Terms of Service, please contact us 
-                  at legal@cortex.ai
+                  at legal@unv3iled.ai
                 </p>
               </div>
             </CardContent>
           </Card>
         </div>
-      </section>
+      </motion.section>
     </div>
   );
 }

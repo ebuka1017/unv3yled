@@ -4,7 +4,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Cortex Design System - Bubblegum Glass AI Companion */
+/* unv3iled Design System - Bubblegum Glass AI Companion */
 
 @layer base {
   :root {
@@ -82,6 +82,37 @@
     --sidebar-accent-foreground: var(--text-secondary);
     --sidebar-border: 330 20% 85%;
     --sidebar-ring: var(--bubblegum-pink-dark);
+  }
+
+  .dark {
+    /* Dark mode color overrides */
+    --background: 330 20% 5%;
+    --foreground: 330 5% 95%;
+    --card: 330 20% 8%;
+    --card-foreground: 330 5% 95%;
+    --popover: 330 20% 8%;
+    --popover-foreground: 330 5% 95%;
+    --primary: 330 85% 75%;
+    --primary-foreground: 330 20% 5%;
+    --secondary: 330 20% 12%;
+    --secondary-foreground: 330 5% 90%;
+    --muted: 330 15% 15%;
+    --muted-foreground: 330 5% 65%;
+    --accent: 330 85% 75%;
+    --accent-foreground: 330 20% 5%;
+    --destructive: 0 84% 65%;
+    --destructive-foreground: 330 5% 95%;
+    --border: 330 20% 15%;
+    --input: 330 20% 12%;
+    --ring: 330 85% 75%;
+    
+    /* Dark mode glass effects */
+    --glass-primary: 330 20% 8%;
+    --glass-secondary: 330 20% 12%;
+    --glass-tertiary: 330 20% 15%;
+    
+    /* Dark gradients */
+    --gradient-glass: linear-gradient(135deg, hsl(var(--glass-primary) / 0.9) 0%, hsl(var(--glass-secondary) / 0.95) 100%);
   }
 }
 

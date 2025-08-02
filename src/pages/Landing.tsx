@@ -3,6 +3,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { useAuth } from "@/hooks/useAuth";
 import { useNavigate, Link } from "react-router-dom";
 import { Sparkles, Music, Users, Heart, ArrowRight, Brain, Zap } from "lucide-react";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { motion } from "framer-motion";
 export default function Landing() {
   const {
     user
@@ -22,6 +24,7 @@ export default function Landing() {
               <Link to="/about" className="text-muted-foreground hover:text-foreground transition-colors">
                 About
               </Link>
+              <ThemeToggle />
               <Button onClick={() => navigate(user ? '/dashboard' : '/auth')} className="pill-button">
                 {user ? 'Dashboard' : 'Get Started'}
               </Button>
@@ -31,7 +34,11 @@ export default function Landing() {
       </header>
 
       {/* Hero Section */}
-      <section className="py-20 px-6">
+      <motion.section 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="py-20 px-6"
+      >
         <div className="container mx-auto max-w-4xl text-center">
           <div className="mb-8">
             <h1 className="text-5xl md:text-6xl font-bold text-foreground mb-6">
@@ -83,7 +90,7 @@ export default function Landing() {
             </Card>
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Features Section */}
       <section className="py-20 px-6 bg-muted/20">
@@ -202,7 +209,7 @@ export default function Landing() {
           </div>
           
           <div className="border-t border-primary/20 mt-8 pt-8 text-center text-sm text-muted-foreground">
-            <p>&copy; 2024 Cortex. All rights reserved.</p>
+            <p>&copy; 2024 unv3iled. All rights reserved.</p>
           </div>
         </div>
       </footer>

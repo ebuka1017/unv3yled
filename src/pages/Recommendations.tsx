@@ -224,7 +224,7 @@ export default function Recommendations() {
   );
 
   return (
-    <div className="p-6 max-w-7xl mx-auto">
+    <div className="p-6 max-w-7xl mx-auto pb-24 relative">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -303,37 +303,40 @@ export default function Recommendations() {
           </TabsContent>
         </Tabs>
 
-        {/* Stats */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="glass-strong rounded-3xl p-6"
-        >
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+      </motion.div>
+
+      {/* Fixed Stats at Bottom */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3 }}
+        className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-4xl px-4"
+      >
+        <div className="glass-strong rounded-3xl p-4 shadow-2xl border border-primary/20">
+          <div className="grid grid-cols-3 gap-4 text-center">
             <div>
-              <div className="text-3xl font-bold text-primary mb-2">
+              <div className="text-2xl font-bold text-primary mb-1">
                 {likedItems.length}
               </div>
-              <p className="text-muted-foreground">Items Saved</p>
+              <p className="text-muted-foreground text-sm">Items Saved</p>
             </div>
             <div>
-              <div className="text-3xl font-bold text-primary mb-2">
+              <div className="text-2xl font-bold text-primary mb-1">
                 {recommendations.length - dismissedItems.length}
               </div>
-              <p className="text-muted-foreground">Active Recommendations</p>
+              <p className="text-muted-foreground text-sm">Active Recommendations</p>
             </div>
             <div>
-              <div className="text-3xl font-bold text-primary mb-2">
+              <div className="text-2xl font-bold text-primary mb-1">
                 {recommendations.length > 0 
                   ? Math.round(recommendations.reduce((acc, rec) => acc + rec.confidence, 0) / recommendations.length * 100) + '%'
                   : '0%'
                 }
               </div>
-              <p className="text-muted-foreground">Average Match Score</p>
+              <p className="text-muted-foreground text-sm">Average Match Score</p>
             </div>
           </div>
-        </motion.div>
+        </div>
       </motion.div>
     </div>
   );
