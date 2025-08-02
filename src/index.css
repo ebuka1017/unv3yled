@@ -199,21 +199,49 @@
     50% { transform: translateY(-10px); }
   }
   
+  /* Glass utility classes */
+  .glass-card {
+    backdrop-filter: blur(20px);
+    background: var(--gradient-glass);
+    border: 1px solid hsl(var(--bubblegum-pink) / 0.2);
+    box-shadow: var(--shadow-glass);
+    border-radius: var(--radius);
+  }
+  
+  .glass-input {
+    backdrop-filter: blur(16px);
+    background: hsl(var(--glass-primary) / 0.8);
+    border: 1px solid hsl(var(--bubblegum-pink) / 0.3);
+    border-radius: var(--radius);
+  }
+  
+  .glass-button {
+    backdrop-filter: blur(16px);
+    background: var(--gradient-glass);
+    border: 1px solid hsl(var(--bubblegum-pink) / 0.2);
+    transition: all 0.3s var(--ease-bubblegum);
+  }
+  
+  .glass-button:hover {
+    background: linear-gradient(135deg, hsl(var(--glass-secondary) / 0.9) 0%, hsl(var(--glass-tertiary) / 0.95) 100%);
+    box-shadow: var(--shadow-bubblegum);
+  }
+
   /* Scrollbar styling */
   ::-webkit-scrollbar {
     width: 8px;
   }
-  
+
   ::-webkit-scrollbar-track {
     background: hsl(var(--glass-primary) / 0.5);
     border-radius: 4px;
   }
-  
+
   ::-webkit-scrollbar-thumb {
     background: hsl(var(--bubblegum-pink) / 0.4);
     border-radius: 4px;
   }
-  
+
   ::-webkit-scrollbar-thumb:hover {
     background: hsl(var(--bubblegum-pink) / 0.6);
   }
