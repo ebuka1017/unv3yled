@@ -17,6 +17,7 @@ import {
   Bot
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import ErrorBoundary from "@/components/ErrorBoundary";
 
 interface Message {
   id: string;
@@ -36,6 +37,8 @@ interface VoiceState {
 export function ChatInterface() {
   console.log('ChatInterface component rendering');
   const { user } = useAuth();
+  
+  console.log('ChatInterface user:', user);
   const { toast } = useToast();
   const [messages, setMessages] = useState<Message[]>([
     { id: "1", content: "Hello! I'm your AI music assistant. What can I help you discover today?", role: "assistant", timestamp: new Date() }
@@ -237,23 +240,24 @@ export function ChatInterface() {
   };
 
   return (
-    <div className="flex flex-col h-[calc(100vh-4rem)] max-w-4xl mx-auto">
-      {/* Header */}
-      <div className="p-6 border-b border-primary/20">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-2xl bg-primary/20 flex items-center justify-center shimmer">
-            <Bot className="w-5 h-5 text-primary" />
-          </div>
-          <div>
-            <h1 className="text-xl font-bold text-transparent bg-gradient-bubblegum bg-clip-text">
-              Cultural Discovery Chat
-            </h1>
-            <p className="text-sm text-muted-foreground">
-              Ask for personalized recommendations across music, movies, books & more
-            </p>
+    <ErrorBoundary>
+      <div className="flex flex-col h-[calc(100vh-4rem)] max-w-4xl mx-auto">
+        {/* Header */}
+        <div className="p-6 border-b border-primary/20">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-2xl bg-primary/20 flex items-center justify-center shimmer">
+              <Bot className="w-5 h-5 text-primary" />
+            </div>
+            <div>
+              <h1 className="text-xl font-bold text-transparent bg-gradient-bubblegum bg-clip-text">
+                Cultural Discovery Chat
+              </h1>
+              <p className="text-sm text-muted-foreground">
+                Ask for personalized recommendations across music, movies, books & more
+              </p>
+            </div>
           </div>
         </div>
-      </div>
 
       {/* Messages */}
       <div className="flex-1 overflow-y-auto p-6 space-y-4">
@@ -397,6 +401,6 @@ export function ChatInterface() {
           )}
         </AnimatePresence>
       </div>
-    </div>
+    </ErrorBoundary>
   );
 }

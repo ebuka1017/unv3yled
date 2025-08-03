@@ -80,13 +80,15 @@ export default {
 					primary: 'hsl(var(--text-primary))',
 					secondary: 'hsl(var(--text-secondary))',
 					muted: 'hsl(var(--text-muted))',
-					accent: 'hsl(var(--text-accent))'
+					accent: 'hsl(var(--text-accent))',
+					bubblegum: 'hsl(var(--bubblegum-pink))'
 				}
 			},
 			backgroundImage: {
 				'gradient-neural': 'var(--gradient-neural)',
 				'gradient-glass': 'var(--gradient-glass)',
-				'gradient-depth': 'var(--gradient-depth)'
+				'gradient-depth': 'var(--gradient-depth)',
+				'gradient-bubblegum': 'var(--gradient-bubblegum)'
 			},
 			boxShadow: {
 				'neural': 'var(--shadow-neural)',
