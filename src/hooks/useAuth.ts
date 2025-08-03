@@ -10,9 +10,11 @@ export function useAuth() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    console.log('useAuth: Setting up auth state listener');
     // Set up auth state listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
+        console.log('useAuth: Auth state change:', event, session);
         setSession(session);
         setUser(session?.user ?? null);
         setLoading(false);
@@ -26,7 +28,9 @@ export function useAuth() {
     );
 
     // THEN check for existing session
+    console.log('useAuth: Checking for existing session');
     supabase.auth.getSession().then(({ data: { session } }) => {
+      console.log('useAuth: Existing session:', session);
       setSession(session);
       setUser(session?.user ?? null);
       setLoading(false);
