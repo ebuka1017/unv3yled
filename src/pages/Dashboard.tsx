@@ -47,12 +47,40 @@ const Dashboard = () => {
   }
 
   console.log('Dashboard rendering with user:', user);
+  
+  // Simple test to see if basic styling works
   return (
-    <ErrorBoundary>
-      <AppShell>
-        <ChatInterface />
-      </AppShell>
-    </ErrorBoundary>
+    <div className="min-h-screen bg-background p-8">
+      <h1 className="text-4xl font-bold text-primary mb-4">Dashboard Test</h1>
+      
+      <div className="space-y-4 mb-8">
+        <div className="test-css-vars">
+          <h2 className="text-2xl font-bold mb-2">CSS Variables Test</h2>
+          <p>This should have a bubblegum pink background</p>
+        </div>
+        
+        <div className="glass-card p-6">
+          <h2 className="text-2xl font-bold mb-2">Glass Card Test</h2>
+          <p className="text-muted-foreground">This should have a glass effect</p>
+        </div>
+        
+        <div className="bg-gradient-bubblegum p-6 rounded-lg">
+          <h2 className="text-2xl font-bold text-white mb-2">Gradient Test</h2>
+          <p className="text-white">This should have a bubblegum gradient</p>
+        </div>
+        
+        <div className="bg-primary text-primary-foreground p-6 rounded-lg">
+          <h2 className="text-2xl font-bold mb-2">Primary Color Test</h2>
+          <p>This should have primary colors</p>
+        </div>
+      </div>
+      
+      <ErrorBoundary>
+        <AppShell>
+          <ChatInterface />
+        </AppShell>
+      </ErrorBoundary>
+    </div>
   );
 };
 

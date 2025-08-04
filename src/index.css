@@ -128,6 +128,14 @@
     font-family: 'Inter', system-ui, sans-serif;
   }
   
+  /* Test class to verify CSS variables work */
+  .test-css-vars {
+    background: hsl(var(--bubblegum-pink));
+    color: white;
+    padding: 1rem;
+    border-radius: 0.5rem;
+  }
+  
   /* Bubblegum Glass morphism utilities */
   .glass {
     backdrop-filter: blur(20px);
