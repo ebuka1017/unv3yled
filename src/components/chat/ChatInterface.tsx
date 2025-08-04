@@ -401,6 +401,7 @@ export function ChatInterface() {
           )}
         </AnimatePresence>
       </div>
+    </div>
     </ErrorBoundary>
   );
 }
