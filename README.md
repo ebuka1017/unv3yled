@@ -39,7 +39,7 @@ Unv3iled compares your cultural signature to others and surfaces your closest "t
 
 ### 🎙️ Voice Interaction
 
-Full voice-to-voice conversation powered by ElevenLabs and OpenAI Whisper. You can talk to Unv3iled like a friend — ask for recommendations, explanations, and insights without touching the screen.
+Full voice-to-voice conversation powered by ElevenLabs Speech-to-Text and Text-to-Speech. You can talk to Unv3iled like a friend — ask for recommendations, explanations, and insights without touching the screen.
 
 ### ✨ Serendipity
 
@@ -84,7 +84,7 @@ Each Qloo API call includes your full updated history, leading to smarter matche
 * **Qloo API** – Taste graph and multi-domain mapping
 * **Gemini 2.5 Flash** – Explanations and insights
 * **ElevenLabs** – Voice input/output (WebSocket)
-* **OpenAI Whisper** – Speech-to-text conversion
+* **ElevenLabs Speech-to-Text** – Voice input processing
 * **React 18** – App framework
 * **TailwindCSS + Radix UI + Framer Motion** – For responsive, beautiful UI
 * **Vite** – Fast development and building
@@ -139,7 +139,7 @@ All parts of the system are live. Edge functions handle Qloo, Spotify, and Gemin
 - ✅ Added proper error handling across all APIs
 
 ### Voice Integration
-- ✅ Implemented real speech-to-text with OpenAI Whisper
+- ✅ Implemented real speech-to-text with ElevenLabs Speech-to-Text
 - ✅ Enhanced ElevenLabs integration for better TTS
 - ✅ Added WebSocket-based real-time voice chat
 - ✅ Improved voice processing pipeline
@@ -191,7 +191,6 @@ QLOO_BASE_URL=your_qloo_base_url
 GEMINI_API_KEY=your_gemini_api_key
 ELEVENLABS_API_KEY=your_elevenlabs_api_key
 ELEVENLABS_VOICE_ID=your_voice_id
-OPENAI_API_KEY=your_openai_api_key
 
 # Spotify
 SPOTIFY_CLIENT_ID=your_spotify_client_id

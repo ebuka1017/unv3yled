@@ -46,7 +46,7 @@ serve(async (req) => {
           // Handle voice input from client
           const audioData = data.audio; // Base64 encoded audio
           
-          // Convert audio to text using OpenAI Whisper
+          // Convert audio to text using ElevenLabs Speech-to-Text
           const transcription = await convertSpeechToText(audioData);
           
           socket.send(JSON.stringify({
@@ -137,29 +137,31 @@ serve(async (req) => {
 
 async function convertSpeechToText(audioBase64: string): Promise<string> {
   try {
-    const openaiApiKey = Deno.env.get('OPENAI_API_KEY');
+    const elevenlabsApiKey = Deno.env.get('ELEVENLABS_API_KEY');
     
-    if (!openaiApiKey) {
-      throw new Error('OpenAI API key not configured');
+    if (!elevenlabsApiKey) {
+      throw new Error('ElevenLabs API key not configured');
     }
     
     // Convert base64 to buffer
     const audioBuffer = Uint8Array.from(atob(audioBase64), c => c.charCodeAt(0));
     
+    // Use ElevenLabs Speech-to-Text API
     const formData = new FormData();
-    formData.append('file', new Blob([audioBuffer], { type: 'audio/wav' }), 'audio.wav');
-    formData.append('model', 'whisper-1');
+    formData.append('audio', new Blob([audioBuffer], { type: 'audio/wav' }), 'audio.wav');
+    formData.append('model_id', 'eleven_multilingual_v2'); // Use ElevenLabs model
     
-    const response = await fetch('https://api.openai.com/v1/audio/transcriptions', {
+    const response = await fetch('https://api.elevenlabs.io/v1/speech-to-text', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${openaiApiKey}`,
+        'xi-api-key': elevenlabsApiKey,
       },
       body: formData,
     });
     
     if (!response.ok) {
-      throw new Error(`OpenAI Whisper API error: ${response.status}`);
+      const errorText = await response.text();
+      throw new Error(`ElevenLabs Speech-to-Text API error: ${response.status} - ${errorText}`);
     }
     
     const result = await response.json();

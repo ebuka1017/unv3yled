@@ -67,7 +67,7 @@
 - No real speech-to-text
 
 **After:**
-- Real OpenAI Whisper integration for speech-to-text
+- Real ElevenLabs Speech-to-Text integration
 - Enhanced ElevenLabs WebSocket connection
 - Proper audio processing pipeline
 - Better error handling and user feedback
@@ -176,7 +176,7 @@
 - Enhanced user experience
 
 ### ✅ Voice Features
-- Real speech-to-text with OpenAI Whisper
+- Real speech-to-text with ElevenLabs Speech-to-Text
 - Enhanced ElevenLabs integration
 - WebSocket-based real-time communication
 - Better voice processing pipeline
@@ -223,7 +223,7 @@ QLOO_BASE_URL=your_qloo_base_url
 GEMINI_API_KEY=your_gemini_api_key
 ELEVENLABS_API_KEY=your_elevenlabs_api_key
 ELEVENLABS_VOICE_ID=your_voice_id
-OPENAI_API_KEY=your_openai_api_key
+
 
 # Spotify
 SPOTIFY_CLIENT_ID=your_spotify_client_id
