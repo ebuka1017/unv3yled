@@ -30,26 +30,26 @@ const App = () => (
         <Toaster />
         <Sonner />
         <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Landing />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/profile" element={<TasteProfile />} />
-          <Route path="/recommendations" element={<Recommendations />} />
-          <Route path="/spotify" element={<SpotifySync />} />
-          <Route path="/friends" element={<TasteTwins />} />
-          <Route path="/saved" element={<Saved />} />
-          <Route path="/settings" element={<Settings />} />
-          <Route path="/auth" element={<AuthPage />} />
-          <Route path="/auth/callback" element={<AuthCallback />} />
-          <Route path="/onboarding" element={<Onboarding />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/terms" element={<Terms />} />
-          <Route path="/privacy" element={<Privacy />} />
-          <Route path="/data-usage" element={<DataUsage />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Landing />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/profile" element={<TasteProfile />} />
+            <Route path="/recommendations" element={<Recommendations />} />
+            <Route path="/spotify" element={<SpotifySync />} />
+            <Route path="/friends" element={<TasteTwins />} />
+            <Route path="/saved" element={<Saved />} />
+            <Route path="/settings" element={<Settings />} />
+            <Route path="/auth" element={<AuthPage />} />
+            <Route path="/auth/callback" element={<AuthCallback />} />
+            <Route path="/onboarding" element={<Onboarding />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/terms" element={<Terms />} />
+            <Route path="/privacy" element={<Privacy />} />
+            <Route path="/data-usage" element={<DataUsage />} />
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
     </TooltipProvider>
     </ThemeProvider>
   </QueryClientProvider>
