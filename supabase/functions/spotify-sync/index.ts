@@ -46,33 +46,85 @@ serve(async (req) => {
       throw new Error('No Spotify access token found');
     }
 
-    // Function to make authenticated Spotify API calls
-    async function fetchSpotifyData(endpoint: string, accessToken: string) {
-      const response = await fetch(`https://api.spotify.com/v1${endpoint}`, {
+    // Function to refresh Spotify access token
+    async function refreshSpotifyToken(refreshToken: string): Promise<string> {
+      const spotifyClientId = Deno.env.get('SPOTIFY_CLIENT_ID');
+      const spotifyClientSecret = Deno.env.get('SPOTIFY_CLIENT_SECRET');
+      
+      if (!spotifyClientId || !spotifyClientSecret) {
+        throw new Error('Spotify client credentials not configured');
+      }
+
+      const response = await fetch('https://accounts.spotify.com/api/token', {
+        method: 'POST',
         headers: {
-          'Authorization': `Bearer ${accessToken}`,
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Authorization': `Basic ${btoa(`${spotifyClientId}:${spotifyClientSecret}`)}`,
         },
+        body: new URLSearchParams({
+          grant_type: 'refresh_token',
+          refresh_token: refreshToken,
+        }),
       });
 
       if (!response.ok) {
-        if (response.status === 401) {
-          throw new Error('Spotify token expired');
-        }
-        throw new Error(`Spotify API error: ${response.status}`);
+        throw new Error(`Failed to refresh Spotify token: ${response.status}`);
       }
 
-      return response.json();
+      const tokenData = await response.json();
+      return tokenData.access_token;
+    }
+
+    // Function to make authenticated Spotify API calls with automatic token refresh
+    async function fetchSpotifyData(endpoint: string, accessToken: string, refreshToken: string): Promise<any> {
+      let currentToken = accessToken;
+      
+      const makeRequest = async (token: string) => {
+        const response = await fetch(`https://api.spotify.com/v1${endpoint}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (!response.ok) {
+          if (response.status === 401) {
+            throw new Error('TOKEN_EXPIRED');
+          }
+          throw new Error(`Spotify API error: ${response.status}`);
+        }
+
+        return response.json();
+      };
+
+      try {
+        return await makeRequest(currentToken);
+      } catch (error) {
+        if (error.message === 'TOKEN_EXPIRED') {
+          console.log('Refreshing Spotify token...');
+          currentToken = await refreshSpotifyToken(refreshToken);
+          
+          // Update the token in the database
+          await supabaseClient
+            .from('profiles')
+            .update({ spotify_access_token: currentToken })
+            .eq('user_id', user.id);
+          
+          return await makeRequest(currentToken);
+        }
+        throw error;
+      }
     }
 
     // Fetch user's Spotify data
     console.log('Fetching Spotify data...');
     
-    const [topTracks, topArtists, recentlyPlayed, savedTracks] = await Promise.all([
-      fetchSpotifyData('/me/top/tracks?limit=50&time_range=medium_term', profile.spotify_access_token),
-      fetchSpotifyData('/me/top/artists?limit=50&time_range=medium_term', profile.spotify_access_token),
-      fetchSpotifyData('/me/player/recently-played?limit=50', profile.spotify_access_token),
-      fetchSpotifyData('/me/tracks?limit=50', profile.spotify_access_token),
+    const [topTracks, topArtists, recentlyPlayed, savedTracks, userPlaylists] = await Promise.all([
+      fetchSpotifyData('/me/top/tracks?limit=50&time_range=medium_term', profile.spotify_access_token, profile.spotify_refresh_token),
+      fetchSpotifyData('/me/top/artists?limit=50&time_range=medium_term', profile.spotify_access_token, profile.spotify_refresh_token),
+      fetchSpotifyData('/me/player/recently-played?limit=50', profile.spotify_access_token, profile.spotify_refresh_token),
+      fetchSpotifyData('/me/tracks?limit=50', profile.spotify_access_token, profile.spotify_refresh_token),
+      fetchSpotifyData('/me/playlists?limit=20', profile.spotify_access_token, profile.spotify_refresh_token),
     ]);
 
     console.log('Spotify data fetched successfully');
@@ -111,6 +163,14 @@ serve(async (req) => {
         metadata: savedTracks,
         last_synced: new Date().toISOString(),
       },
+      {
+        user_id: user.id,
+        spotify_id: 'playlists',
+        data_type: 'playlists',
+        name: 'User Playlists',
+        metadata: userPlaylists,
+        last_synced: new Date().toISOString(),
+      },
     ];
 
     // Upsert the data
@@ -138,6 +198,7 @@ serve(async (req) => {
           topArtists: topArtists.items?.length || 0,
           recentlyPlayed: recentlyPlayed.items?.length || 0,
           savedTracks: savedTracks.items?.length || 0,
+          playlists: userPlaylists.items?.length || 0,
         }
       }),
       { 

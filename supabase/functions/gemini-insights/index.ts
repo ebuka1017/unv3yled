@@ -39,8 +39,8 @@ serve(async (req) => {
 
     // Create context for Gemini
     const contextPrompt = `
-You are Cortex, an AI taste companion that provides culturally intelligent insights. 
-Analyze the following recommendation data and user context to provide a natural, conversational response.
+You are Unv3iled, an AI cultural intelligence companion that provides sophisticated insights about personal taste and cultural preferences. 
+Analyze the following recommendation data and user context to provide a natural, conversational response that explains the cultural connections.
 
 User Profile:
 - Age: ${userProfile?.age || 'Not specified'}
@@ -52,17 +52,24 @@ Recommendations Data: ${JSON.stringify(recommendations, null, 2)}
 
 Please provide:
 1. A natural, conversational response to the user's question
-2. Explain why these recommendations match their cultural taste profile
-3. Highlight interesting connections between their preferences
+2. Explain why these recommendations match their cultural taste profile using specific examples
+3. Highlight interesting cross-domain connections between their preferences (e.g., how music taste relates to book preferences)
 4. Suggest 2-3 specific next steps or follow-up explorations
+5. Use cultural context and explain the deeper meaning behind the recommendations
 
-Keep the response engaging, insightful, and culturally aware. Write as if you're a knowledgeable friend who understands both their personal taste and broader cultural context.
+Keep the response engaging, insightful, and culturally aware. Write as if you're a knowledgeable friend who understands both their personal taste and broader cultural context. Be specific about the cultural significance and connections.
 `;
 
     console.log('Calling Gemini API...');
 
-    // Call Gemini API
-    const geminiResponse = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=' + Deno.env.get('GEMINI_API_KEY'), {
+    // Call Gemini API with proper error handling
+    const geminiApiKey = Deno.env.get('GEMINI_API_KEY');
+    
+    if (!geminiApiKey) {
+      throw new Error('Gemini API key not configured');
+    }
+
+    const geminiResponse = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=' + geminiApiKey, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -88,8 +95,9 @@ Keep the response engaging, insightful, and culturally aware. Write as if you're
       insightText = geminiData.candidates?.[0]?.content?.parts?.[0]?.text || 'Unable to generate insights at this time.';
       console.log('Gemini API call successful');
     } else {
-      console.log('Gemini API error, using fallback');
-      insightText = `Based on your preferences, I can see you have a sophisticated taste profile that blends ${userProfile?.location ? 'your ' + userProfile.location + ' cultural context' : 'diverse cultural influences'} with contemporary trends. These recommendations reflect your unique aesthetic that values both artistic depth and cultural relevance. I'd suggest exploring the connections between these recommendations to discover new aspects of your taste profile.`;
+      const errorText = await geminiResponse.text();
+      console.error('Gemini API error:', geminiResponse.status, errorText);
+      throw new Error(`Gemini API error: ${geminiResponse.status} - ${errorText}`);
     }
 
     // Update the recommendation with Gemini insights

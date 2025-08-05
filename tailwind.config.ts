@@ -62,13 +62,14 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-				// Cortex specific colors
-				neural: {
-					purple: 'hsl(var(--neural-purple))',
-					'purple-light': 'hsl(var(--neural-purple-light))',
-					'purple-dark': 'hsl(var(--neural-purple-dark))',
-					blue: 'hsl(var(--neural-blue))',
-					cyan: 'hsl(var(--neural-cyan))'
+				// Modern color palette
+				modern: {
+					blue: 'hsl(var(--primary-blue))',
+					'blue-light': 'hsl(var(--primary-blue-light))',
+					'blue-dark': 'hsl(var(--primary-blue-dark))',
+					purple: 'hsl(var(--accent-purple))',
+					'purple-light': 'hsl(var(--accent-purple-light))',
+					'purple-dark': 'hsl(var(--accent-purple-dark))'
 				},
 				glass: {
 					primary: 'hsl(var(--glass-primary))',
@@ -81,22 +82,22 @@ export default {
 					secondary: 'hsl(var(--text-secondary))',
 					muted: 'hsl(var(--text-muted))',
 					accent: 'hsl(var(--text-accent))',
-					bubblegum: 'hsl(var(--bubblegum-pink))'
+					gradient: 'hsl(var(--primary-blue))'
 				}
 			},
 			backgroundImage: {
-				'gradient-neural': 'var(--gradient-neural)',
+				'gradient-modern': 'var(--gradient-primary)',
 				'gradient-glass': 'var(--gradient-glass)',
 				'gradient-depth': 'var(--gradient-depth)',
-				'gradient-bubblegum': 'var(--gradient-bubblegum)'
+				'gradient-primary': 'var(--gradient-primary)'
 			},
 			boxShadow: {
-				'neural': 'var(--shadow-neural)',
+				'modern': 'var(--shadow-primary)',
 				'glass': 'var(--shadow-glass)',
 				'elevation': 'var(--shadow-elevation)'
 			},
 			animation: {
-				'pulse-neural': 'pulse-neural 2s infinite',
+				'pulse-modern': 'pulse-modern 2s infinite',
 				'fade-in': 'fade-in 0.3s ease-out',
 				'slide-up': 'slide-up 0.3s ease-out',
 				'scale-in': 'scale-in 0.2s ease-out'
@@ -105,9 +106,9 @@ export default {
 				lg: 'var(--radius)',
 				md: 'calc(var(--radius) - 2px)',
 				sm: 'calc(var(--radius) - 4px)',
-				'3xl': '24px',
-				'4xl': '32px',
-				'5xl': '48px'
+				'3xl': '16px',
+				'4xl': '24px',
+				'5xl': '32px'
 			},
 			keyframes: {
 				'accordion-down': {
@@ -126,12 +127,12 @@ export default {
 						height: '0'
 					}
 				},
-				'pulse-neural': {
+				'pulse-modern': {
 					'0%, 100%': {
-						boxShadow: '0 0 0 0 rgba(126, 87, 194, 0.7)'
+						boxShadow: '0 0 0 0 rgba(59, 130, 246, 0.7)'
 					},
 					'50%': {
-						boxShadow: '0 0 0 20px rgba(126, 87, 194, 0)'
+						boxShadow: '0 0 0 20px rgba(59, 130, 246, 0)'
 					}
 				},
 				'fade-in': {
