@@ -259,147 +259,148 @@ export function ChatInterface() {
           </div>
         </div>
 
-      {/* Messages */}
-      <div className="flex-1 overflow-y-auto p-6 space-y-4">
-        <AnimatePresence>
-          {messages.map((message) => (
+        {/* Messages */}
+        <div className="flex-1 overflow-y-auto p-6 space-y-4">
+          <AnimatePresence>
+            {messages.map((message) => (
+              <motion.div
+                key={message.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
+              >
+                <div className={`max-w-[70%] rounded-3xl p-4 ${
+                  message.role === 'user' 
+                    ? 'bg-primary text-primary-foreground' 
+                    : 'glass-card'
+                }`}>
+                  <div className="flex items-start gap-2">
+                    {message.role === 'assistant' && (
+                      <Sparkles className="w-4 h-4 text-primary mt-1 flex-shrink-0" />
+                    )}
+                    {message.type === 'voice' && message.role === 'user' && (
+                      <Mic className="w-4 h-4 mt-1 flex-shrink-0" />
+                    )}
+                    <div className="flex-1">
+                      <p className="text-sm">{message.content}</p>
+                      <p className="text-xs opacity-70 mt-1">
+                        {message.timestamp.toLocaleTimeString()}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </AnimatePresence>
+
+          {isLoading && (
             <motion.div
-              key={message.id}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
+              className="flex justify-start"
             >
-              <div className={`max-w-[70%] rounded-3xl p-4 ${
-                message.role === 'user' 
-                  ? 'bg-primary text-primary-foreground' 
-                  : 'glass-card'
-              }`}>
-                <div className="flex items-start gap-2">
-                  {message.role === 'assistant' && (
-                    <Sparkles className="w-4 h-4 text-primary mt-1 flex-shrink-0" />
-                  )}
-                  {message.type === 'voice' && message.role === 'user' && (
-                    <Mic className="w-4 h-4 mt-1 flex-shrink-0" />
-                  )}
-                  <div className="flex-1">
-                    <p className="text-sm">{message.content}</p>
-                    <p className="text-xs opacity-70 mt-1">
-                      {message.timestamp.toLocaleTimeString()}
-                    </p>
-                  </div>
+              <div className="glass-card rounded-3xl p-4 max-w-[70%]">
+                <div className="flex items-center gap-2">
+                  <Loader2 className="w-4 h-4 animate-spin text-primary" />
+                  <p className="text-sm">Generating recommendations...</p>
                 </div>
               </div>
             </motion.div>
-          ))}
-        </AnimatePresence>
-
-        {isLoading && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="flex justify-start"
-          >
-            <div className="glass-card rounded-3xl p-4 max-w-[70%]">
-              <div className="flex items-center gap-2">
-                <Loader2 className="w-4 h-4 animate-spin text-primary" />
-                <p className="text-sm">Generating recommendations...</p>
-              </div>
-            </div>
-          </motion.div>
-        )}
-
-        <div ref={messagesEndRef} />
-      </div>
-
-      {/* Input Area */}
-      <div className="p-6 border-t border-primary/20">
-        <form onSubmit={handleSubmit} className="flex gap-3">
-          <div className="flex-1 relative">
-            <Input
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-              placeholder="Ask for music, movie, book, or travel recommendations..."
-              className="glass-input pr-12 py-3 rounded-full"
-              disabled={isLoading || voiceState.isListening}
-            />
-            <Button
-              type="submit"
-              size="sm"
-              disabled={!inputValue.trim() || isLoading}
-              className="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8 rounded-full p-0"
-            >
-              <Send className="w-4 h-4" />
-            </Button>
-          </div>
-
-          {/* Voice Controls */}
-          <div className="flex gap-2">
-            <Button
-              type="button"
-              variant="outline"
-              size="icon"
-              onClick={toggleVolume}
-              className="rounded-full glass-card"
-            >
-              {voiceState.volume > 0 ? (
-                <Volume2 className="w-4 h-4" />
-              ) : (
-                <VolumeX className="w-4 h-4" />
-              )}
-            </Button>
-
-            <Button
-              type="button"
-              variant={voiceState.isListening ? "destructive" : "outline"}
-              size="icon"
-              onClick={toggleVoice}
-              disabled={voiceState.isProcessing || isLoading}
-              className={`rounded-full ${voiceState.isListening ? 'animate-pulse' : 'glass-card'}`}
-            >
-              {voiceState.isProcessing ? (
-                <Loader2 className="w-4 h-4 animate-spin" />
-              ) : voiceState.isListening ? (
-                <MicOff className="w-4 h-4" />
-              ) : (
-                <Mic className="w-4 h-4" />
-              )}
-            </Button>
-          </div>
-        </form>
-
-        {/* Voice Status */}
-        <AnimatePresence>
-          {(voiceState.isListening || voiceState.isProcessing || voiceState.isSpeaking) && (
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              className="mt-3 text-center"
-            >
-              <div className="inline-flex items-center gap-2 text-sm text-muted-foreground">
-                {voiceState.isListening && (
-                  <>
-                    <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
-                    Listening...
-                  </>
-                )}
-                {voiceState.isProcessing && (
-                  <>
-                    <Zap className="w-4 h-4 animate-pulse" />
-                    Processing voice...
-                  </>
-                )}
-                {voiceState.isSpeaking && (
-                  <>
-                    <Volume2 className="w-4 h-4 animate-pulse" />
-                    Speaking...
-                  </>
-                )}
-              </div>
-            </motion.div>
           )}
-        </AnimatePresence>
+
+          <div ref={messagesEndRef} />
+        </div>
+
+        {/* Input Area */}
+        <div className="p-6 border-t border-primary/20">
+          <form onSubmit={handleSubmit} className="flex gap-3">
+            <div className="flex-1 relative">
+              <Input
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                placeholder="Ask for music, movie, book, or travel recommendations..."
+                className="glass-input pr-12 py-3 rounded-full"
+                disabled={isLoading || voiceState.isListening}
+              />
+              <Button
+                type="submit"
+                size="sm"
+                disabled={!inputValue.trim() || isLoading}
+                className="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8 rounded-full p-0"
+              >
+                <Send className="w-4 h-4" />
+              </Button>
+            </div>
+
+            {/* Voice Controls */}
+            <div className="flex gap-2">
+              <Button
+                type="button"
+                variant="outline"
+                size="icon"
+                onClick={toggleVolume}
+                className="rounded-full glass-card"
+              >
+                {voiceState.volume > 0 ? (
+                  <Volume2 className="w-4 h-4" />
+                ) : (
+                  <VolumeX className="w-4 h-4" />
+                )}
+              </Button>
+
+              <Button
+                type="button"
+                variant={voiceState.isListening ? "destructive" : "outline"}
+                size="icon"
+                onClick={toggleVoice}
+                disabled={voiceState.isProcessing || isLoading}
+                className={`rounded-full ${voiceState.isListening ? 'animate-pulse' : 'glass-card'}`}
+              >
+                {voiceState.isProcessing ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : voiceState.isListening ? (
+                  <MicOff className="w-4 h-4" />
+                ) : (
+                  <Mic className="w-4 h-4" />
+                )}
+              </Button>
+            </div>
+          </form>
+
+          {/* Voice Status */}
+          <AnimatePresence>
+            {(voiceState.isListening || voiceState.isProcessing || voiceState.isSpeaking) && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="mt-3 text-center"
+              >
+                <div className="inline-flex items-center gap-2 text-sm text-muted-foreground">
+                  {voiceState.isListening && (
+                    <>
+                      <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
+                      Listening...
+                    </>
+                  )}
+                  {voiceState.isProcessing && (
+                    <>
+                      <Zap className="w-4 h-4 animate-pulse" />
+                      Processing voice...
+                    </>
+                  )}
+                  {voiceState.isSpeaking && (
+                    <>
+                      <Volume2 className="w-4 h-4 animate-pulse" />
+                      Speaking...
+                    </>
+                  )}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
       </div>
     </ErrorBoundary>
   );
