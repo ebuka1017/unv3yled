@@ -3,7 +3,6 @@ import { useAuth } from "@/hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import { AppShell } from "@/components/layout/AppShell";
 import { ChatInterface } from "@/components/chat/ChatInterface";
-import ErrorBoundary from "@/components/ErrorBoundary";
 
 const Dashboard = () => {
   const { user, loading } = useAuth();
@@ -48,11 +47,9 @@ const Dashboard = () => {
 
   console.log('Dashboard rendering with user:', user);
   return (
-    <ErrorBoundary>
-      <AppShell>
-        <ChatInterface />
-      </AppShell>
-    </ErrorBoundary>
+    <AppShell>
+      <ChatInterface />
+    </AppShell>
   );
 };
 
