@@ -128,6 +128,21 @@
     font-family: 'Inter', system-ui, sans-serif;
   }
   
+  /* Prevent flash of unstyled content */
+  .js-focus-visible :focus:not(.focus-visible) {
+    outline: none;
+  }
+  
+  /* Loading state to prevent layout shift */
+  .loading {
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+  }
+  
+  .loaded {
+    opacity: 1;
+  }
+  
   /* Bubblegum Glass morphism utilities */
   .glass {
     backdrop-filter: blur(20px);
