@@ -1,5 +1,5 @@
 import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react-swc";
+import { svelte } from "@sveltejs/vite-plugin-svelte";
 import path from "path";
 import { componentTagger } from "lovable-tagger";
 
@@ -10,7 +10,7 @@ export default defineConfig(({ mode }) => ({
     port: 8080,
   },
   plugins: [
-    react(),
+    svelte(),
     mode === 'development' &&
     componentTagger(),
   ].filter(Boolean),
