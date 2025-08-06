@@ -1,171 +1,176 @@
-import { useState, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
+import { useAuth } from './useAuth';
 
 export interface Recommendation {
   id: string;
-  category: 'music' | 'books' | 'movies' | 'travel';
   title: string;
-  metadata: any;
+  description: string;
+  category: 'music' | 'books' | 'movies' | 'travel' | 'fashion';
   confidence: number;
   reason: string;
-  image?: string;
-  external_urls?: Record<string, string>;
+  external_urls: {
+    spotify?: string;
+    youtube?: string;
+    google_books?: string;
+    imdb?: string;
+    goodreads?: string;
+  };
+  metadata: {
+    artist?: string;
+    author?: string;
+    director?: string;
+    year?: number;
+    genre?: string;
+    rating?: number;
+    duration?: string;
+    location?: string;
+    price_range?: string;
+  };
+  gemini_insights?: string;
+  created_at: string;
+}
+
+export interface RecommendationsState {
+  recommendations: Recommendation[];
+  loading: boolean;
+  error: string | null;
+  lastUpdated: Date | null;
 }
 
 export function useRecommendations() {
-  const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const { toast } = useToast();
+  const { user } = useAuth();
+  const [state, setState] = useState<RecommendationsState>({
+    recommendations: [],
+    loading: false,
+    error: null,
+    lastUpdated: null,
+  });
 
-  const generateRecommendations = useCallback(async (prompt: string, category?: string) => {
-    setIsLoading(true);
+  const fetchRecommendations = async () => {
+    if (!user) return;
+
+    setState(prev => ({ ...prev, loading: true, error: null }));
+
     try {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
-        throw new Error('No active session');
-      }
+      // Fetch recommendations from the database
+      const { data, error } = await supabase
+        .from('qloo_recommendations')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false })
+        .limit(50);
 
+      if (error) throw error;
+
+      // Transform the data to match our interface
+      const recommendations: Recommendation[] = data.map(item => ({
+        id: item.id,
+        title: item.qloo_response.title || 'Unknown',
+        description: item.qloo_response.description || '',
+        category: item.category as any,
+        confidence: item.confidence_score || 0.8,
+        reason: item.qloo_response.reason || 'Recommended based on your preferences',
+        external_urls: item.qloo_response.external_urls || {},
+        metadata: item.qloo_response.metadata || {},
+        gemini_insights: item.gemini_insights,
+        created_at: item.created_at,
+      }));
+
+      setState({
+        recommendations,
+        loading: false,
+        error: null,
+        lastUpdated: new Date(),
+      });
+    } catch (error) {
+      console.error('Error fetching recommendations:', error);
+      setState(prev => ({
+        ...prev,
+        loading: false,
+        error: 'Failed to fetch recommendations',
+      }));
+    }
+  };
+
+  const generateRecommendations = async (prompt: string) => {
+    if (!user) return;
+
+    setState(prev => ({ ...prev, loading: true, error: null }));
+
+    try {
+      // Call the Qloo recommendations edge function
       const { data, error } = await supabase.functions.invoke('qloo-recommendations', {
-        body: { prompt, context: category || 'general' },
         headers: {
-          Authorization: `Bearer ${session.access_token}`,
+          Authorization: `Bearer ${(await supabase.auth.getSession()).data.session?.access_token}`,
+        },
+        body: {
+          prompt,
+          context: 'user_request',
         },
       });
 
       if (error) throw error;
 
-      if (data?.recommendations) {
-        const enrichedRecommendations = await enrichWithMetadata(data.recommendations);
-        setRecommendations(enrichedRecommendations);
-      }
-
-      return data;
+      // Refresh recommendations after generation
+      await fetchRecommendations();
     } catch (error) {
-      console.error('Failed to generate recommendations:', error);
-      toast({
-        title: "Error",
-        description: "Failed to generate recommendations. Please try again.",
-        variant: "destructive",
-      });
+      console.error('Error generating recommendations:', error);
+      setState(prev => ({
+        ...prev,
+        loading: false,
+        error: 'Failed to generate recommendations',
+      }));
+    }
+  };
+
+  const saveRecommendation = async (recommendation: Recommendation) => {
+    if (!user) return;
+
+    try {
+      const { error } = await supabase
+        .from('saved_recommendations')
+        .insert({
+          user_id: user.id,
+          recommendation_id: recommendation.id,
+          saved_at: new Date().toISOString(),
+        });
+
+      if (error) throw error;
+    } catch (error) {
+      console.error('Error saving recommendation:', error);
       throw error;
-    } finally {
-      setIsLoading(false);
     }
-  }, [toast]);
-
-  const enrichWithMetadata = async (rawRecommendations: any[]): Promise<Recommendation[]> => {
-    const enriched = await Promise.all(
-      rawRecommendations.map(async (rec) => {
-        try {
-          let metadata = rec.metadata || {};
-          let image = rec.image;
-
-          // Enrich based on category
-          switch (rec.category) {
-            case 'books':
-              const bookData = await fetchBookMetadata(rec.title, rec.metadata?.author);
-              metadata = { ...metadata, ...bookData.metadata };
-              image = bookData.image || image;
-              break;
-
-            case 'movies':
-              const movieData = await fetchMovieMetadata(rec.title);
-              metadata = { ...metadata, ...movieData.metadata };
-              image = movieData.image || image;
-              break;
-
-            case 'travel':
-              const travelData = await fetchTravelImages(rec.title);
-              image = travelData.image || image;
-              break;
-
-            default:
-              break;
-          }
-
-          return {
-            ...rec,
-            metadata,
-            image,
-          };
-        } catch (error) {
-          console.warn(`Failed to enrich ${rec.category} recommendation:`, error);
-          return rec;
-        }
-      })
-    );
-
-    return enriched;
   };
 
-  const fetchBookMetadata = async (title: string, author?: string) => {
+  const unsaveRecommendation = async (recommendationId: string) => {
+    if (!user) return;
+
     try {
-      const query = author ? `${title} ${author}` : title;
-      const response = await fetch(
-        `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(query)}&maxResults=1`
-      );
-      const data = await response.json();
+      const { error } = await supabase
+        .from('saved_recommendations')
+        .delete()
+        .eq('user_id', user.id)
+        .eq('recommendation_id', recommendationId);
 
-      if (data.items?.[0]) {
-        const book = data.items[0].volumeInfo;
-        return {
-          metadata: {
-            description: book.description,
-            publishedDate: book.publishedDate,
-            pageCount: book.pageCount,
-            categories: book.categories,
-            averageRating: book.averageRating,
-            ratingsCount: book.ratingsCount,
-            language: book.language,
-            previewLink: book.previewLink,
-            infoLink: book.infoLink,
-          },
-          image: book.imageLinks?.thumbnail?.replace('http:', 'https:') || undefined,
-        };
-      }
+      if (error) throw error;
     } catch (error) {
-      console.warn('Google Books API error:', error);
+      console.error('Error unsaving recommendation:', error);
+      throw error;
     }
-    return { metadata: {}, image: undefined };
   };
 
-  const fetchMovieMetadata = async (title: string) => {
-    try {
-      // Note: This would require TMDB API key
-      // For now, return mock structure
-      return {
-        metadata: {
-          overview: "Detailed movie description would come from TMDB API",
-          release_date: "2023",
-          vote_average: 8.5,
-          runtime: 120,
-          genres: ["Drama", "Thriller"],
-        },
-        image: "/api/placeholder/300/450",
-      };
-    } catch (error) {
-      console.warn('TMDB API error:', error);
+  useEffect(() => {
+    if (user) {
+      fetchRecommendations();
     }
-    return { metadata: {}, image: undefined };
-  };
-
-  const fetchTravelImages = async (destination: string) => {
-    try {
-      // Note: This would require Getty Images API key
-      // For now, return placeholder
-      return {
-        image: "/api/placeholder/400/300",
-      };
-    } catch (error) {
-      console.warn('Getty Images API error:', error);
-    }
-    return { image: undefined };
-  };
+  }, [user]);
 
   return {
-    recommendations,
-    isLoading,
+    ...state,
+    fetchRecommendations,
     generateRecommendations,
+    saveRecommendation,
+    unsaveRecommendation,
   };
 }

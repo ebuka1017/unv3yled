@@ -174,9 +174,37 @@ async function convertSpeechToText(audioBase64: string): Promise<string> {
 
 async function processWithAI(userInput: string): Promise<string> {
   try {
-    // This would typically call your Qloo + Gemini pipeline
-    // For now, return a placeholder response
-    return `I heard you say: "${userInput}". I'm processing your request for cultural recommendations. This voice integration is being enhanced to provide real-time cultural intelligence insights.`;
+    // Call the Qloo recommendations edge function to get real recommendations
+    const { data, error } = await supabase.functions.invoke('qloo-recommendations', {
+      headers: {
+        Authorization: `Bearer ${(await supabase.auth.getSession()).data.session?.access_token}`,
+      },
+      body: {
+        prompt: userInput,
+        context: 'voice_chat',
+      },
+    });
+
+    if (error) throw error;
+
+    // Get AI insights from Gemini
+    const { data: insightsData, error: insightsError } = await supabase.functions.invoke('gemini-insights', {
+      headers: {
+        Authorization: `Bearer ${(await supabase.auth.getSession()).data.session?.access_token}`,
+      },
+      body: {
+        recommendations: data,
+        userPrompt: userInput,
+        userProfile: null, // Will be populated from user's profile
+      },
+    });
+
+    if (insightsError) {
+      console.error('Insights generation failed:', insightsError);
+      return `I heard you say: "${userInput}". I'm processing your request for cultural recommendations. Let me search for some great options for you.`;
+    }
+
+    return insightsData?.insights || `I heard you say: "${userInput}". I'm processing your request for cultural recommendations. Let me search for some great options for you.`;
   } catch (error) {
     console.error('AI processing error:', error);
     return 'I apologize, but I encountered an error processing your request. Please try again.';
