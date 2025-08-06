@@ -200,12 +200,27 @@ export function ChatInterface() {
 
   const processVoiceInput = async (audioBlob: Blob) => {
     try {
-      // Convert audio to text (this would typically use a speech-to-text service)
-      // For now, we'll simulate transcription
-      const mockTranscription = "I'd like some music recommendations based on my recent listening history";
+      // Convert audio to base64 for server processing
+      const arrayBuffer = await audioBlob.arrayBuffer();
+      const base64Audio = btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)));
+      
+      // Send to voice chat edge function for processing
+      const { data, error } = await supabase.functions.invoke('voice-chat', {
+        headers: {
+          Authorization: `Bearer ${(await supabase.auth.getSession()).data.session?.access_token}`,
+        },
+        body: {
+          audio: base64Audio,
+        },
+      });
+
+      if (error) throw error;
+
+      // Use the transcribed text from the server
+      const transcription = data?.transcription || "Could not transcribe audio";
       
       setVoiceState(prev => ({ ...prev, isProcessing: false }));
-      await sendMessage(mockTranscription, true);
+      await sendMessage(transcription, true);
 
     } catch (error) {
       console.error('Voice processing error:', error);
