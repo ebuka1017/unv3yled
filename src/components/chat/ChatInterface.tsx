@@ -247,7 +247,7 @@ export function ChatInterface() {
             <Bot className="w-5 h-5 text-primary" />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-transparent bg-gradient-bubblegum bg-clip-text">
+            <h1 className="text-xl font-bold text-transparent bg-gradient-primary bg-clip-text">
               Cultural Discovery Chat
             </h1>
             <p className="text-sm text-muted-foreground">

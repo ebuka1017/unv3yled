@@ -70,7 +70,7 @@ export function AppSidebar() {
           </div>
           {!collapsed && (
             <div>
-              <h1 className="text-lg font-bold text-bubblegum bg-gradient-bubblegum bg-clip-text text-transparent">
+              <h1 className="text-lg font-bold text-gradient bg-gradient-primary bg-clip-text text-transparent">
                 unv3iled
               </h1>
               <p className="text-xs text-muted-foreground">AI Taste Companion</p>

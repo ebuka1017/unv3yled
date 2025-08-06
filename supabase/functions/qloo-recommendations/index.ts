@@ -75,11 +75,18 @@ serve(async (req) => {
 
     console.log('Calling Qloo API...');
 
-    // Call Qloo API
-    const qlooResponse = await fetch(Deno.env.get('QLOO_BASE_URL') + '/recommendations', {
+    // Call Qloo API with proper error handling
+    const qlooApiKey = Deno.env.get('QLOO_API_KEY');
+    const qlooBaseUrl = Deno.env.get('QLOO_BASE_URL');
+
+    if (!qlooApiKey || !qlooBaseUrl) {
+      throw new Error('Qloo API configuration missing');
+    }
+
+    const qlooResponse = await fetch(`${qlooBaseUrl}/recommendations`, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${Deno.env.get('QLOO_API_KEY')}`,
+        'Authorization': `Bearer ${qlooApiKey}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(qlooPayload),
@@ -90,29 +97,9 @@ serve(async (req) => {
       qlooData = await qlooResponse.json();
       console.log('Qloo API call successful');
     } else {
-      console.log('Qloo API unavailable, using mock data');
-      // Mock Qloo response for development
-      qlooData = {
-        recommendations: {
-          music: [
-            { id: '1', title: 'Indie Rock Playlist', type: 'playlist', confidence: 0.85 },
-            { id: '2', title: 'Lo-Fi Hip Hop', type: 'playlist', confidence: 0.78 }
-          ],
-          books: [
-            { id: '3', title: 'The Seven Husbands of Evelyn Hugo', author: 'Taylor Jenkins Reid', confidence: 0.82 },
-            { id: '4', title: 'Klara and the Sun', author: 'Kazuo Ishiguro', confidence: 0.79 }
-          ],
-          movies: [
-            { id: '5', title: 'Everything Everywhere All at Once', year: 2022, confidence: 0.88 },
-            { id: '6', title: 'The Grand Budapest Hotel', year: 2014, confidence: 0.76 }
-          ],
-          travel: [
-            { id: '7', title: 'Tokyo, Japan', type: 'city', confidence: 0.83 },
-            { id: '8', title: 'Iceland Road Trip', type: 'experience', confidence: 0.81 }
-          ]
-        },
-        confidence_score: 0.82
-      };
+      const errorText = await qlooResponse.text();
+      console.error('Qloo API error:', qlooResponse.status, errorText);
+      throw new Error(`Qloo API error: ${qlooResponse.status} - ${errorText}`);
     }
 
     // Transform Qloo response to our format

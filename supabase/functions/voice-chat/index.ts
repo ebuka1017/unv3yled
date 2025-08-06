@@ -22,8 +22,15 @@ serve(async (req) => {
     
     console.log('WebSocket connection established for voice chat');
     
-    // Connect to ElevenLabs WebSocket
-    const elevenlabsSocket = new WebSocket(`wss://api.elevenlabs.io/v1/text-to-speech/${Deno.env.get('ELEVENLABS_AGENT_ID')}/stream-input?model_id=eleven_monolingual_v1`);
+    // Connect to ElevenLabs WebSocket for real-time TTS
+    const elevenlabsApiKey = Deno.env.get('ELEVENLABS_API_KEY');
+    const elevenlabsVoiceId = Deno.env.get('ELEVENLABS_VOICE_ID') || '9BWtsMINqrJLrRacOk9x'; // Default to Aria
+    
+    if (!elevenlabsApiKey) {
+      throw new Error('ElevenLabs API key not configured');
+    }
+    
+    const elevenlabsSocket = new WebSocket(`wss://api.elevenlabs.io/v1/text-to-speech/${elevenlabsVoiceId}/stream-input?model_id=eleven_multilingual_v2`);
     
     socket.onopen = () => {
       console.log('Client WebSocket opened');
@@ -37,25 +44,38 @@ serve(async (req) => {
         
         if (data.type === 'audio_input') {
           // Handle voice input from client
-          // This would typically involve:
-          // 1. Convert audio to text (Whisper/similar)
-          // 2. Process with AI (Gemini/ChatGPT)
-          // 3. Convert response to speech (ElevenLabs)
+          const audioData = data.audio; // Base64 encoded audio
           
-          // For now, send a mock response
+          // Convert audio to text using ElevenLabs Speech-to-Text
+          const transcription = await convertSpeechToText(audioData);
+          
           socket.send(JSON.stringify({
             type: 'transcription',
-            text: 'I heard you speak! Voice processing will be implemented with ElevenLabs integration.'
+            text: transcription
           }));
           
-          // Mock AI response
-          setTimeout(() => {
-            socket.send(JSON.stringify({
-              type: 'ai_response',
-              text: 'This is where the AI would respond with cultural insights based on your voice input.',
-              audio_url: null // Will contain ElevenLabs audio URL when implemented
+          // Process with AI and get response
+          const aiResponse = await processWithAI(transcription);
+          
+          // Convert AI response to speech
+          if (elevenlabsSocket.readyState === WebSocket.OPEN) {
+            elevenlabsSocket.send(JSON.stringify({
+              text: aiResponse,
+              voice_settings: {
+                stability: 0.5,
+                similarity_boost: 0.75,
+                style: 0.0,
+                use_speaker_boost: true
+              }
             }));
-          }, 1000);
+          }
+          
+          // Send AI response to client
+          socket.send(JSON.stringify({
+            type: 'ai_response',
+            text: aiResponse,
+            audio_url: null // Will be streamed via ElevenLabs WebSocket
+          }));
         }
         
         if (data.type === 'text_input') {
@@ -65,7 +85,9 @@ serve(async (req) => {
               text: data.text,
               voice_settings: {
                 stability: 0.5,
-                similarity_boost: 0.5
+                similarity_boost: 0.75,
+                style: 0.0,
+                use_speaker_boost: true
               }
             }));
           }
@@ -112,3 +134,51 @@ serve(async (req) => {
     });
   }
 });
+
+async function convertSpeechToText(audioBase64: string): Promise<string> {
+  try {
+    const elevenlabsApiKey = Deno.env.get('ELEVENLABS_API_KEY');
+    
+    if (!elevenlabsApiKey) {
+      throw new Error('ElevenLabs API key not configured');
+    }
+    
+    // Convert base64 to buffer
+    const audioBuffer = Uint8Array.from(atob(audioBase64), c => c.charCodeAt(0));
+    
+    // Use ElevenLabs Speech-to-Text API
+    const formData = new FormData();
+    formData.append('audio', new Blob([audioBuffer], { type: 'audio/wav' }), 'audio.wav');
+    formData.append('model_id', 'eleven_multilingual_v2'); // Use ElevenLabs model
+    
+    const response = await fetch('https://api.elevenlabs.io/v1/speech-to-text', {
+      method: 'POST',
+      headers: {
+        'xi-api-key': elevenlabsApiKey,
+      },
+      body: formData,
+    });
+    
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`ElevenLabs Speech-to-Text API error: ${response.status} - ${errorText}`);
+    }
+    
+    const result = await response.json();
+    return result.text || '';
+  } catch (error) {
+    console.error('Speech-to-text error:', error);
+    throw error;
+  }
+}
+
+async function processWithAI(userInput: string): Promise<string> {
+  try {
+    // This would typically call your Qloo + Gemini pipeline
+    // For now, return a placeholder response
+    return `I heard you say: "${userInput}". I'm processing your request for cultural recommendations. This voice integration is being enhanced to provide real-time cultural intelligence insights.`;
+  } catch (error) {
+    console.error('AI processing error:', error);
+    return 'I apologize, but I encountered an error processing your request. Please try again.';
+  }
+}

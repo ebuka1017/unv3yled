@@ -4,33 +4,41 @@
 @tailwind components;
 @tailwind utilities;
 
-/* unv3iled Design System - Bubblegum Glass AI Companion */
+/* unv3iled Design System - Modern AI Companion */
 
 @layer base {
   :root {
-    /* Bubblegum Pink Core Colors */
-    --bubblegum-pink: 330 85% 75%;
-    --bubblegum-pink-light: 330 85% 85%;
-    --bubblegum-pink-dark: 320 80% 65%;
-    --coral-pink: 340 90% 80%;
-    --peach-pink: 10 85% 85%;
+    /* Modern Core Colors */
+    --primary-blue: 220 85% 60%;
+    --primary-blue-light: 220 85% 75%;
+    --primary-blue-dark: 220 80% 45%;
+    --accent-purple: 260 85% 65%;
+    --accent-purple-light: 260 85% 80%;
+    --accent-purple-dark: 260 80% 50%;
     
-    /* Notepad Yellows */
-    --notepad-yellow: 50 40% 92%;
-    --notepad-yellow-warm: 45 45% 88%;
-    --notepad-yellow-dark: 40 35% 80%;
+    /* Neutral Tones */
+    --neutral-50: 220 15% 98%;
+    --neutral-100: 220 15% 95%;
+    --neutral-200: 220 15% 90%;
+    --neutral-300: 220 15% 80%;
+    --neutral-400: 220 15% 65%;
+    --neutral-500: 220 15% 45%;
+    --neutral-600: 220 15% 35%;
+    --neutral-700: 220 15% 25%;
+    --neutral-800: 220 15% 15%;
+    --neutral-900: 220 15% 8%;
     
-    /* Glass & Depth with warm tones */
-    --glass-primary: 50 40% 92%;
-    --glass-secondary: 45 45% 88%;
-    --glass-tertiary: 330 85% 95%;
-    --glass-accent: 330 85% 75%;
+    /* Glass & Depth with modern tones */
+    --glass-primary: 220 15% 98%;
+    --glass-secondary: 220 15% 95%;
+    --glass-tertiary: 220 15% 92%;
+    --glass-accent: 220 85% 60%;
     
     /* Text Hierarchy */
-    --text-primary: 25 25% 20%;
-    --text-secondary: 25 15% 40%;
-    --text-muted: 25 10% 60%;
-    --text-accent: 320 80% 50%;
+    --text-primary: 220 15% 15%;
+    --text-secondary: 220 15% 35%;
+    --text-muted: 220 15% 55%;
+    --text-accent: 220 85% 50%;
     
     /* Semantic Colors */
     --success: 142 76% 50%;
@@ -38,17 +46,17 @@
     --error: 0 84% 65%;
     
     /* Gradients */
-    --gradient-bubblegum: linear-gradient(135deg, hsl(var(--bubblegum-pink)) 0%, hsl(var(--coral-pink)) 50%, hsl(var(--peach-pink)) 100%);
-    --gradient-glass: linear-gradient(135deg, hsl(var(--glass-primary) / 0.8) 0%, hsl(var(--glass-secondary) / 0.9) 100%);
-    --gradient-shimmer: linear-gradient(90deg, transparent, hsl(var(--bubblegum-pink) / 0.3), transparent);
+    --gradient-primary: linear-gradient(135deg, hsl(var(--primary-blue)) 0%, hsl(var(--accent-purple)) 50%, hsl(var(--primary-blue-dark)) 100%);
+    --gradient-glass: linear-gradient(135deg, hsl(var(--glass-primary) / 0.9) 0%, hsl(var(--glass-secondary) / 0.95) 100%);
+    --gradient-shimmer: linear-gradient(90deg, transparent, hsl(var(--primary-blue) / 0.3), transparent);
     
-    /* Shadows with pink tints */
-    --shadow-bubblegum: 0 8px 32px hsl(var(--bubblegum-pink-dark) / 0.2);
-    --shadow-glass: 0 8px 32px hsl(var(--bubblegum-pink) / 0.1);
-    --shadow-elevation: 0 4px 16px hsl(var(--bubblegum-pink-dark) / 0.15);
+    /* Shadows with modern tints */
+    --shadow-primary: 0 8px 32px hsl(var(--primary-blue-dark) / 0.15);
+    --shadow-glass: 0 8px 32px hsl(var(--primary-blue) / 0.08);
+    --shadow-elevation: 0 4px 16px hsl(var(--primary-blue-dark) / 0.12);
     
     /* Motion */
-    --ease-bubblegum: cubic-bezier(0.4, 0, 0.2, 1);
+    --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
     --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
     
     /* Legacy mappings for shadcn compatibility */
@@ -58,58 +66,58 @@
     --card-foreground: var(--text-primary);
     --popover: var(--glass-secondary);
     --popover-foreground: var(--text-primary);
-    --primary: var(--bubblegum-pink-dark);
+    --primary: var(--primary-blue-dark);
     --primary-foreground: var(--text-primary);
     --secondary: var(--glass-tertiary);
     --secondary-foreground: var(--text-secondary);
-    --muted: var(--notepad-yellow-dark);
+    --muted: var(--neutral-200);
     --muted-foreground: var(--text-muted);
-    --accent: var(--bubblegum-pink);
+    --accent: var(--primary-blue);
     --accent-foreground: var(--text-primary);
     --destructive: var(--error);
     --destructive-foreground: var(--text-primary);
-    --border: 330 20% 85%;
-    --input: 50 40% 96%;
-    --ring: var(--bubblegum-pink-dark);
-    --radius: 24px;
+    --border: 220 15% 85%;
+    --input: 220 15% 96%;
+    --ring: var(--primary-blue-dark);
+    --radius: 16px;
     
     /* Sidebar specific */
     --sidebar-background: var(--glass-primary);
     --sidebar-foreground: var(--text-primary);
-    --sidebar-primary: var(--bubblegum-pink-dark);
+    --sidebar-primary: var(--primary-blue-dark);
     --sidebar-primary-foreground: var(--text-primary);
     --sidebar-accent: var(--glass-secondary);
     --sidebar-accent-foreground: var(--text-secondary);
-    --sidebar-border: 330 20% 85%;
-    --sidebar-ring: var(--bubblegum-pink-dark);
+    --sidebar-border: 220 15% 85%;
+    --sidebar-ring: var(--primary-blue-dark);
   }
 
   .dark {
     /* Dark mode color overrides */
-    --background: 330 20% 5%;
-    --foreground: 330 5% 95%;
-    --card: 330 20% 8%;
-    --card-foreground: 330 5% 95%;
-    --popover: 330 20% 8%;
-    --popover-foreground: 330 5% 95%;
-    --primary: 330 85% 75%;
-    --primary-foreground: 330 20% 5%;
-    --secondary: 330 20% 12%;
-    --secondary-foreground: 330 5% 90%;
-    --muted: 330 15% 15%;
-    --muted-foreground: 330 5% 65%;
-    --accent: 330 85% 75%;
-    --accent-foreground: 330 20% 5%;
+    --background: 220 15% 8%;
+    --foreground: 220 15% 95%;
+    --card: 220 15% 12%;
+    --card-foreground: 220 15% 95%;
+    --popover: 220 15% 12%;
+    --popover-foreground: 220 15% 95%;
+    --primary: 220 85% 60%;
+    --primary-foreground: 220 15% 8%;
+    --secondary: 220 15% 18%;
+    --secondary-foreground: 220 15% 90%;
+    --muted: 220 15% 15%;
+    --muted-foreground: 220 15% 65%;
+    --accent: 220 85% 60%;
+    --accent-foreground: 220 15% 8%;
     --destructive: 0 84% 65%;
-    --destructive-foreground: 330 5% 95%;
-    --border: 330 20% 15%;
-    --input: 330 20% 12%;
-    --ring: 330 85% 75%;
+    --destructive-foreground: 220 15% 95%;
+    --border: 220 15% 20%;
+    --input: 220 15% 18%;
+    --ring: 220 85% 60%;
     
     /* Dark mode glass effects */
-    --glass-primary: 330 20% 8%;
-    --glass-secondary: 330 20% 12%;
-    --glass-tertiary: 330 20% 15%;
+    --glass-primary: 220 15% 12%;
+    --glass-secondary: 220 15% 18%;
+    --glass-tertiary: 220 15% 22%;
     
     /* Dark gradients */
     --gradient-glass: linear-gradient(135deg, hsl(var(--glass-primary) / 0.9) 0%, hsl(var(--glass-secondary) / 0.95) 100%);
@@ -143,24 +151,24 @@
     opacity: 1;
   }
   
-  /* Bubblegum Glass morphism utilities */
+  /* Modern Glass morphism utilities */
   .glass {
     backdrop-filter: blur(20px);
     background: var(--gradient-glass);
-    border: 1px solid hsl(var(--bubblegum-pink) / 0.2);
+    border: 1px solid hsl(var(--primary-blue) / 0.15);
     box-shadow: var(--shadow-glass);
   }
   
   .glass-strong {
     backdrop-filter: blur(32px);
     background: linear-gradient(135deg, hsl(var(--glass-primary) / 0.9) 0%, hsl(var(--glass-secondary) / 0.95) 100%);
-    border: 1px solid hsl(var(--bubblegum-pink) / 0.3);
-    box-shadow: var(--shadow-bubblegum);
+    border: 1px solid hsl(var(--primary-blue) / 0.2);
+    box-shadow: var(--shadow-primary);
   }
   
-  /* Bubblegum gradient text */
-  .text-bubblegum {
-    background: var(--gradient-bubblegum);
+  /* Modern gradient text */
+  .text-gradient {
+    background: var(--gradient-primary);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -168,12 +176,12 @@
   
   /* Hover animations */
   .hover-lift {
-    transition: all 0.3s var(--ease-bubblegum);
+    transition: all 0.3s var(--ease-smooth);
   }
   
   .hover-lift:hover {
     transform: translateY(-4px);
-    box-shadow: var(--shadow-bubblegum);
+    box-shadow: var(--shadow-primary);
   }
   
   /* Shimmer animation */
@@ -196,11 +204,11 @@
   @keyframes pulse-recording {
     0%, 100% {
       transform: scale(1);
-      box-shadow: 0 0 0 0 hsl(var(--bubblegum-pink-dark) / 0.7);
+      box-shadow: 0 0 0 0 hsl(var(--primary-blue-dark) / 0.7);
     }
     50% {
       transform: scale(1.05);
-      box-shadow: 0 0 0 15px hsl(var(--bubblegum-pink-dark) / 0);
+      box-shadow: 0 0 0 15px hsl(var(--primary-blue-dark) / 0);
     }
   }
   
@@ -218,7 +226,7 @@
   .glass-card {
     backdrop-filter: blur(20px);
     background: var(--gradient-glass);
-    border: 1px solid hsl(var(--bubblegum-pink) / 0.2);
+    border: 1px solid hsl(var(--primary-blue) / 0.15);
     box-shadow: var(--shadow-glass);
     border-radius: var(--radius);
   }
@@ -226,20 +234,20 @@
   .glass-input {
     backdrop-filter: blur(16px);
     background: hsl(var(--glass-primary) / 0.8);
-    border: 1px solid hsl(var(--bubblegum-pink) / 0.3);
+    border: 1px solid hsl(var(--primary-blue) / 0.2);
     border-radius: var(--radius);
   }
   
   .glass-button {
     backdrop-filter: blur(16px);
     background: var(--gradient-glass);
-    border: 1px solid hsl(var(--bubblegum-pink) / 0.2);
-    transition: all 0.3s var(--ease-bubblegum);
+    border: 1px solid hsl(var(--primary-blue) / 0.15);
+    transition: all 0.3s var(--ease-smooth);
   }
   
   .glass-button:hover {
     background: linear-gradient(135deg, hsl(var(--glass-secondary) / 0.9) 0%, hsl(var(--glass-tertiary) / 0.95) 100%);
-    box-shadow: var(--shadow-bubblegum);
+    box-shadow: var(--shadow-primary);
   }
 
   /* Scrollbar styling */
@@ -253,12 +261,12 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    background: hsl(var(--bubblegum-pink) / 0.4);
+    background: hsl(var(--primary-blue) / 0.3);
     border-radius: 4px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: hsl(var(--bubblegum-pink) / 0.6);
+    background: hsl(var(--primary-blue) / 0.5);
   }
 }
 
