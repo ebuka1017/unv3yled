@@ -1,20 +1,25 @@
 <script lang="ts">
   import { Moon, Sun } from 'lucide-svelte';
+  import { themeStore } from '@/lib/stores/theme';
   
-  let isDark = false;
+  let currentTheme: string = 'light';
+  
+  // Subscribe to theme changes
+  themeStore.subscribe(theme => {
+    currentTheme = theme;
+  });
   
   function toggleTheme() {
-    isDark = !isDark;
-    // TODO: Implement proper theme toggle
+    themeStore.toggle();
   }
 </script>
 
 <button
   on:click={toggleTheme}
-  class="p-2 rounded-md hover:bg-accent hover:text-accent-foreground"
+  class="p-2 rounded-md hover:bg-accent hover:text-accent-foreground transition-colors"
   aria-label="Toggle theme"
 >
-  {#if isDark}
+  {#if currentTheme === 'dark'}
     <Sun class="h-5 w-5" />
   {:else}
     <Moon class="h-5 w-5" />

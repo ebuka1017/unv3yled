@@ -3,15 +3,26 @@
   import { onMount } from 'svelte';
   import Button from '@/components/ui/button/Button.svelte';
   import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-  import ThemeToggle from '@/components/ui/theme-toggle/ThemeToggle.svelte';
   import { Sparkles, Music, Users, Heart, ArrowRight, Brain, Zap } from 'lucide-svelte';
+  import { authStore } from '@/lib/stores/auth';
+  import { getCurrentUser } from '@/lib/supabase';
   
-  let user: any = null;
+  let authState: any;
   let loading = true;
   
+  authStore.subscribe(state => {
+    authState = state;
+    loading = state.loading;
+  });
+  
   onMount(async () => {
-    // TODO: Implement auth logic
-    loading = false;
+    // Check if user is already authenticated
+    const { user, error } = await getCurrentUser();
+    if (user) {
+      authStore.setUser(user);
+    } else {
+      authStore.setLoading(false);
+    }
   });
   
   function navigate(path: string) {
@@ -20,28 +31,6 @@
 </script>
 
 <div class="min-h-screen">
-  <!-- Header -->
-  <header class="glass-strong border-b border-primary/20 sticky top-0 z-50">
-    <div class="container mx-auto px-6 py-4">
-      <div class="flex items-center justify-between">
-        <div class="flex items-center gap-2">
-          <Brain class="w-8 h-8 text-primary" />
-          <span class="text-2xl font-bold text-foreground">unv3iled</span>
-        </div>
-        
-        <nav class="hidden md:flex items-center gap-6">
-          <Link to="/about" class="text-muted-foreground hover:text-foreground transition-colors">
-            About
-          </Link>
-          <ThemeToggle />
-          <Button on:click={() => navigate(user ? '/dashboard' : '/auth')} className="pill-button">
-            {user ? 'Dashboard' : 'Get Started'}
-          </Button>
-        </nav>
-      </div>
-    </div>
-  </header>
-
   <!-- Hero Section -->
   <section class="py-20 px-6">
     <div class="container mx-auto max-w-4xl text-center">
@@ -58,9 +47,9 @@
       </div>
       
       <div class="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
-        <Button on:click={() => navigate(user ? '/dashboard' : '/auth')} size="lg" className="pill-button text-lg px-8 py-6">
+        <Button on:click={() => navigate(authState?.user ? '/dashboard' : '/auth')} size="lg" className="pill-button text-lg px-8 py-6">
           <Sparkles class="w-5 h-5 mr-2" />
-          {user ? 'Go to Dashboard' : 'Get Started'}
+          {authState?.user ? 'Go to Dashboard' : 'Get Started'}
           <ArrowRight class="w-5 h-5 ml-2" />
         </Button>
       </div>
@@ -101,12 +90,6 @@
 </div>
 
 <style>
-  .glass-strong {
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-  }
-  
   .glass-card {
     background: rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(10px);
