@@ -11,6 +11,7 @@ import {
   Settings,
   LogOut,
   ChevronRight,
+  Search,
 } from "lucide-react";
 import {
   Sidebar,
@@ -32,6 +33,7 @@ const navigation = [
   { name: "Chat", href: "/dashboard", icon: MessageSquare },
   { name: "Profile", href: "/profile", icon: User },
   { name: "Recommendations", href: "/recommendations", icon: Sparkles },
+  { name: "Media Search", href: "/media", icon: Search },
   { name: "Spotify", href: "/spotify", icon: Music },
   { name: "Taste Twins", href: "/friends", icon: Users },
   { name: "Saved", href: "/saved", icon: Bookmark },

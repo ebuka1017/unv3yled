@@ -47,13 +47,13 @@ Unv3iled is designed to surprise you. It surfaces unexpected but meaningful resu
 
 ### 🎬 Rich Media Embeds
 
-Live previews of all recommendations:
+Live previews of all recommendations with embedded viewers:
 
-* **Spotify** embeds for music and playlists
-* **YouTube** for trailers, interviews, or music videos
-* **Book covers + purchase links**
-* **Movie/TV posters with stream availability**
-* **Travel destinations with map links and imagery**
+* **Spotify** embeds for tracks, albums, and playlists
+* **YouTube** embeds for videos and channels
+* **Google Books** embeds for book previews and information
+* **Interactive media search** across all platforms
+* **Responsive iframe viewers** with play controls
 
 ### 🧬 Evolving Taste Profile
 
@@ -195,6 +195,12 @@ ELEVENLABS_VOICE_ID=your_voice_id
 # Spotify
 SPOTIFY_CLIENT_ID=your_spotify_client_id
 SPOTIFY_CLIENT_SECRET=your_spotify_client_secret
+
+# YouTube
+YOUTUBE_API_KEY=your_youtube_api_key
+
+# Google Books
+GOOGLE_BOOKS_API_KEY=your_google_books_api_key
 ```
 
 ### Running the App
